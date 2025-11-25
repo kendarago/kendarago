@@ -13,8 +13,8 @@ Table of Contents:
   - [Flowchart](#flowchart)
   - [Features](#features)
     - [1. Location-Based Search](#1-location-based-search)
-    - [2. Vehicle Filtering \& Sorting](#2-vehicle-filtering--sorting)
-    - [3. Vehicle \& Rental Details](#3-vehicle--rental-details)
+    - [2. Vehicle Filtering & Sorting](#2-vehicle-filtering--sorting)
+    - [3. Vehicle & Rental Details](#3-vehicle--rental-details)
   - [UI Designs](#ui-designs)
     - [Home Page](#home-page)
   - [Entity Relationship Diagram (ERD)](#entity-relationship-diagram-erd)
@@ -83,6 +83,7 @@ flowchart TD
 ## Features
 
 ### 1. Location-Based Search
+
 - Automatic location detection via GPS or manual input (city/district)
 - Map integration (Google Maps / Leaflet) showing nearby rentals
 - Rental list displays:
@@ -93,6 +94,7 @@ flowchart TD
 - Fallback: text-based search if GPS is disabled
 
 ### 2. Vehicle Filtering & Sorting
+
 - Filter:
   - Vehicle type (focus on Motorcycles: Matic, Underbone, Sport, etc.)
   - Brand (Honda, Yamaha, etc.)
@@ -105,6 +107,7 @@ flowchart TD
 - Real-time filtering & sorting (without page reload)
 
 ### 3. Vehicle & Rental Details
+
 - Detail page per rental / per motorcycle with:
   - Vehicle photos (multiple)
   - Real-time status: Available / Booked / Maintenance
