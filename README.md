@@ -12,9 +12,9 @@ Table of Contents:
     - [Data Access Layer (Database)](#data-access-layer-database)
   - [Flowchart](#flowchart)
   - [Features](#features)
-    - [1. Pencarian Berdasarkan Lokasi](#1-pencarian-berdasarkan-lokasi)
-    - [2. Filter \& Sorting Kendaraan](#2-filter--sorting-kendaraan)
-    - [3. Detail Kendaraan \& Rental](#3-detail-kendaraan--rental)
+    - [1. Location-Based Search](#1-location-based-search)
+    - [2. Vehicle Filtering & Sorting](#2-vehicle-filtering--sorting)
+    - [3. Vehicle & Rental Details](#3-vehicle--rental-details)
   - [UI Designs](#ui-designs)
     - [Home Page](#home-page)
   - [Entity Relationship Diagram (ERD)](#entity-relationship-diagram-erd)
@@ -82,41 +82,41 @@ flowchart TD
 
 ## Features
 
-### 1. Pencarian Berdasarkan Lokasi
-- Deteksi lokasi otomatis via GPS atau input manual (kota/kecamatan)
-- Integrasi peta (Google Maps / Leaflet) menampilkan rental terdekat
-- List rental menampilkan:
-  - Jarak (km)
-  - Alamat lengkap
-  - Nomor telepon / WhatsApp
-  - Jam operasional
-- Fallback: pencarian berbasis teks jika GPS dimatikan
+### 1. Location-Based Search
+- Automatic location detection via GPS or manual input (city/district)
+- Map integration (Google Maps / Leaflet) showing nearby rentals
+- Rental list displays:
+  - Distance (km)
+  - Full address
+  - Phone number / WhatsApp
+  - Operating hours
+- Fallback: text-based search if GPS is disabled
 
-### 2. Filter & Sorting Kendaraan
+### 2. Vehicle Filtering & Sorting
 - Filter:
-  - Jenis kendaraan (fokus Motor: Matic, Bebek, Sport, dll)
-  - Merk (Honda, Yamaha, dll)
-  - Range harga per hari (slider atau input manual)
-  - Status ketersediaan (Available / Maintenance)
+  - Vehicle type (focus on Motorcycles: Matic, Underbone, Sport, etc.)
+  - Brand (Honda, Yamaha, etc.)
+  - Price range per day (slider or manual input)
+  - Availability status (Available / Maintenance)
 - Sorting:
-  - Harga termurah → termahal
-  - Harga termahal → termurah
-  - Jarak terdekat
-- Filter & sorting real-time (tanpa reload halaman)
+  - Lowest price → Highest
+  - Highest price → Lowest
+  - Nearest distance
+- Real-time filtering & sorting (without page reload)
 
-### 3. Detail Kendaraan & Rental
-- Halaman detail per rental / per motor dengan:
-  - Foto kendaraan (multiple)
-  - Status real-time: Available / Booked / Maintenance
-  - Jenis & merk motor
-  - Harga dasar (mulai dari ... /hari)
-  - Biaya tambahan:
-    - Overtime per jam
-    - Delivery / Pick-up (jika ada)
-  - Syarat & ketentuan sewa
-  - Dokumen wajib (KTP, SIM C, dll)
-  - Tombol langsung hubungi (Telpon / WhatsApp)
-- Update status otomatis via polling atau WebSocket (opsional di MVP)
+### 3. Vehicle & Rental Details
+- Detail page per rental / per motorcycle with:
+  - Vehicle photos (multiple)
+  - Real-time status: Available / Booked / Maintenance
+  - Motorcycle type & brand
+  - Base price (starting from ... /day)
+  - Additional costs:
+    - Overtime per hour
+    - Delivery / Pick-up (if available)
+  - Rental terms & conditions
+  - Required documents (ID Card, Driver's License C, etc.)
+  - Direct contact button (Phone / WhatsApp)
+- Automatic status update via polling or WebSocket (optional in MVP)
 
 ## UI Designs
 
