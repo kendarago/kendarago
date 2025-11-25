@@ -70,20 +70,14 @@ Inspirations:
 - Docker
 
 ## Flowchart
-
 ```mermaid
 flowchart TD
-    A[Start: Open App] --> B[Detect User Location via GPS or Manual Input]
-    B --> C[Search for Nearby Rentals]
-    C --> D[Display List of Rentals with Distance, Address, Contact, Hours]
-    D --> E[Apply Filters: Vehicle Type/Make, Price Range, Availability]
-    E --> F[Sort List by Price Ascending/Descending]
-    F --> G[View Filtered/Sorted List]
-    G --> H{Select a Rental/Vehicle?}
-    H -->|Yes| I[Display Details: Real-time Status, Type/Make, Prices, Additional Fees, Terms, Required Docs]
-    I --> J[User Decides: Contact Rental or Back]
-    H -->|No| K[End Session]
-    J --> K[End Session]
+    A[Start: User Opens App] --> B[Search Vehicles Directly by Location]
+    B --> C[Apply Filters/Sort Vehicles e.g., price, type, distance]
+    C --> D[Select a Vehicle]
+    D --> E[View Vehicle Details e.g., status, price, shop info]
+    E --> F[Book Vehicle]
+    F --> G[End: Confirmation]
 ```
 
 ## Features
