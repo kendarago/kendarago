@@ -101,7 +101,7 @@ export default function LoginRoute({}: Route.ComponentProps) {
             type="submit"
             className="w-full py-3 bg-black hover:bg-gray-900 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
           >
-            Login
+            Sign In
           </Button>
         </Form>
 
