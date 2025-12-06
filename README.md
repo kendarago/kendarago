@@ -1,6 +1,6 @@
-# Kendara Go
+# KendaraGo
 
-[Kendara Go]() is a web-based application designed to facilitate vehicle rentals, with a primary focus on motorcycles. The app addresses key user pains such as inaccurate location and contact information, difficulty in comparing and selecting options, unclear availability, and lack of transparent rental details. It aims to provide a seamless experience for users to find, filter, and view rental options quickly, minimizing the need for direct contact with providers.
+[KendaraGo](https://kendarago.com) is a web-based application designed to facilitate vehicle rentals, with a primary focus on motorcycles. The app addresses key user pains such as inaccurate location and contact information, difficulty in comparing and selecting options, unclear availability, and lack of transparent rental details. It aims to provide a seamless experience for users to find, filter, and view rental options quickly, minimizing the need for direct contact with providers.
 
 Table of Contents:
 
@@ -29,13 +29,14 @@ Table of Contents:
 
 ## Links
 
-- Website/Frontend: 
+- Website/Frontend:
   - Backend:
 - Repositories:
   - Backend: <https://github.com/kendarago/kendarago-api>
   - Frontend: <https://github.com/kendarago/kendarago>
 
 Inspirations:
+
 - <https://www.turo.com>
 - <https://www.traveloka.com/id-id/car-rental>
 - <https://www.kayak.co.id/>
@@ -70,6 +71,7 @@ Inspirations:
 - Docker
 
 ## Flowchart
+
 ```mermaid
 flowchart TD
     A[Start: User Opens App] --> B[Search Vehicles Directly by Location]
