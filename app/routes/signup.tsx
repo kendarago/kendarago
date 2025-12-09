@@ -1,4 +1,4 @@
-import type { Route } from "./+types/register";
+import type { Route } from "./+types/signup";
 // import { useState } from "react";
 import { Form, redirect } from "react-router";
 import { Input } from "../components/ui/input";

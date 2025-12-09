@@ -1,4 +1,4 @@
-import type { Route } from "./+types/login";
+import type { Route } from "./+types/signin";
 import { Form, redirect, type Session } from "react-router";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
