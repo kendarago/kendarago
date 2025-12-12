@@ -1,5 +1,5 @@
 import type { Route } from "./+types/signup";
-// import { useState } from "react";
+import { useState } from "react";
 import { Form, redirect } from "react-router";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -57,6 +57,8 @@ export const registerValidation = () => {
 };
 // Register Form Component
 export default function RegisterRoute() {
+  const [errors, setErrors] = useState<any>({});
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -66,11 +68,18 @@ export default function RegisterRoute() {
     const schema = registerValidation();
     const result = schema.safeParse(data);
 
+    // if (!result.success) {
+    //   console.log("VALIDATION FAILED:", result.error.format());
+    // } else {
+    //   console.log("VALIDATION PASSED:", result.data);
+    // }
     if (!result.success) {
-      console.log("VALIDATION FAILED:", result.error.format());
-    } else {
-      console.log("VALIDATION PASSED:", result.data);
+      setErrors(result.error.format());
+      return;
     }
+
+    setErrors({});
+    console.log("VALIDATION PASSED:", result.data);
   };
 
   return (
@@ -97,32 +106,46 @@ export default function RegisterRoute() {
             <div className="space-y-1">
               <Label>Full Name</Label>
               <Input name="fullName" placeholder="John Doe" />
+              {errors.fullName?._errors && (
+                <p className="text-red-500 text-sm">
+                  {errors.fullName._errors[0]}
+                </p>
+              )}
             </div>
 
             {/* EMAIL */}
             <div className="space-y-1">
               <Label>Email</Label>
               <Input name="email" placeholder="m@example.com" type="email" />
+              {errors.email?._errors && (
+                <p className="text-red-500 text-sm">
+                  {errors.email._errors[0]}
+                </p>
+              )}
             </div>
 
-            {/* PASSWORD + CONFIRM PASSWORD */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label>Password</Label>
-                <Input name="password" type="password" />
-              </div>
-
-              <div className="space-y-1">
-                <Label>Confirm Password</Label>
-                <Input name="confirmPassword" type="password" />
-              </div>
+            {/* PASSWORD */}
+            <div className="space-y-1">
+              <Label>Password</Label>
+              <Input name="password" type="password" />
+              {errors.password?._errors && (
+                <p className="text-red-500 text-sm">
+                  {errors.password._errors[0]}
+                </p>
+              )}
             </div>
 
-            <p className="text-xs text-gray-500 -mt-2">
-              Must be at least 8 characters long.
-            </p>
+            {/* CONFIRM PASSWORD */}
+            <div className="space-y-1">
+              <Label>Confirm Password</Label>
+              <Input name="confirmPassword" type="password" />
+              {errors.confirmPassword?._errors && (
+                <p className="text-red-500 text-sm">
+                  {errors.confirmPassword._errors[0]}
+                </p>
+              )}
+            </div>
 
-            {/* BUTTON */}
             <Button
               className="w-full bg-black text-white hover:bg-gray-800"
               type="submit"
