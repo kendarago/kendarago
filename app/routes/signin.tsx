@@ -44,7 +44,7 @@ import { Button } from "../components/ui/button";
 //   });
 // }
 
-export default function LoginRoute({}: Route.ComponentProps) {
+export default function SignInRoute({}: Route.ComponentProps) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 space-y-8 transition-all duration-300 hover:shadow-2xl">
