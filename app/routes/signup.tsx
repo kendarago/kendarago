@@ -4,12 +4,8 @@ import { Form, redirect } from "react-router";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Label } from "../components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardTitle,
-} from "../components/ui/card";
+import { Card, CardContent } from "../components/ui/card";
+import { z, ZodError } from "zod";
 
 // export function meta({}: Route.MetaArgs) {
 //   return [{ title: "Register" }];
@@ -43,7 +39,40 @@ import {
 //   return redirect("/login");
 // }
 
-export default function RegisterRoute({}: Route.ComponentProps) {
+//VALIDATION WITH ZOD
+export const registerValidation = () => {
+  return z
+    .object({
+      fullName: z.string().min(3, "Full name is required"),
+      email: z.string().email("Invalid Email Format"),
+      password: z.string().min(8, "Password must be at least 8 characters"),
+      confirmPassword: z
+        .string()
+        .min(8, "Confirm password must be at least 8 characters"),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Confirmation password is incorrect",
+      path: ["confirmPassword"],
+    });
+};
+// Register Form Component
+export default function RegisterRoute() {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = new FormData(e.currentTarget);
+    const data = Object.fromEntries(form.entries());
+
+    const schema = registerValidation();
+    const result = schema.safeParse(data);
+
+    if (!result.success) {
+      console.log("VALIDATION FAILED:", result.error.format());
+    } else {
+      console.log("VALIDATION PASSED:", result.data);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <Card className="w-full max-w-md border border-gray-200 shadow-md">
@@ -63,29 +92,29 @@ export default function RegisterRoute({}: Route.ComponentProps) {
             Enter your email below to create your account
           </p>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             {/* FULL NAME */}
             <div className="space-y-1">
               <Label>Full Name</Label>
-              <Input placeholder="John Doe" />
+              <Input name="fullName" placeholder="John Doe" />
             </div>
 
             {/* EMAIL */}
             <div className="space-y-1">
               <Label>Email</Label>
-              <Input placeholder="m@example.com" type="email" />
+              <Input name="email" placeholder="m@example.com" type="email" />
             </div>
 
             {/* PASSWORD + CONFIRM PASSWORD */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label>Password</Label>
-                <Input type="password" />
+                <Input name="password" type="password" />
               </div>
 
               <div className="space-y-1">
                 <Label>Confirm Password</Label>
-                <Input type="password" />
+                <Input name="confirmPassword" type="password" />
               </div>
             </div>
 
