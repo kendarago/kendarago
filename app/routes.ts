@@ -8,8 +8,8 @@ import {
 export default [
   layout("layouts/layout-main.tsx", [
     index("routes/home.tsx"),
-    route("/signin", "routes/signin.tsx"),
-    route("signup", "./routes/signup.tsx"), // POST /auth/register
-    route("bookingformscreen", "./routes/bookingformscreen.tsx"),
+    route("signin", "routes/signin.tsx"), // POST /auth/signin
+    route("signup", "routes/signup.tsx"), // POST /auth/signup
+    route("booking-form", "routes/booking-form.tsx"), // POST /bookings
   ]),
 ] satisfies RouteConfig;
