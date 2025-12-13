@@ -1,8 +1,9 @@
-import { MapPinIcon } from "lucide-react";
+import { MapPinIcon, SearchIcon } from "lucide-react";
 import { VehicleCard } from "~/components/vehicle-card";
 import type { Route } from "./+types/home";
 import { mockVehicles } from "~/lib/mock-data";
 import { useState } from "react";
+import { UnifiedSearchModal } from "~/components/unified-search-modal";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -12,7 +13,10 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
+  const [showSearchModal, setShowSearchModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const dateDisplay = "Any dates";
+  const vehicleDisplay = "Vehicles";
   return (
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header */}
@@ -24,7 +28,30 @@ export default function Home() {
           <span className="text-sm">Find You Vehicles</span>
         </div>
       </header>
-
+      <div className="flex flex-col pb-4">
+        {/* Search Bar */}
+        <div className="px-4 pt-4 pb-2">
+          <button
+            onClick={() => setShowSearchModal(true)}
+            className="w-full flex items-center gap-3 px-4 py-3 bg-card border border-border rounded-full shadow-sm hover:shadow-md transition-shadow"
+          >
+            <SearchIcon className="h-5 w-5 text-primary" />
+            <div className="flex-1 text-left">
+              <p className="text-sm font-medium text-foreground">
+                Where to?
+                {/* {locationLoading ? "Getting location..." : locationDisplay} */}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {dateDisplay} · {vehicleDisplay}
+              </p>
+            </div>
+          </button>
+        </div>
+        <UnifiedSearchModal
+          isOpen={showSearchModal}
+          onClose={() => setShowSearchModal(false)}
+        />
+      </div>
       {/* Vehicle List */}
       <main className="flex-1 px-4 py-4">
         {isLoading ? (
