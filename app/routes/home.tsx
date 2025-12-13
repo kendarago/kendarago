@@ -12,6 +12,8 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+// TODO: clientLoader
+
 export default function Home() {
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

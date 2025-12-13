@@ -1,6 +1,6 @@
 import type React from "react";
 import { SearchIcon, Icon, CircleUserRound } from "lucide-react";
-import { useLocation, useParams } from "react-router";
+import { Link, useLocation, useParams } from "react-router";
 // import { SearchIcon, MapPinnedIcon, HeartIcon } from "./icons";
 // import { useAppStore } from "~/lib/booking-store";
 
@@ -13,21 +13,13 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: "Search", icon: SearchIcon, href: "/" },
-  { label: "Log In", icon: CircleUserRound, href: "/sign" },
+  { label: "Sign In", icon: CircleUserRound, href: "/signin" },
+  { label: "Sign Up", icon: CircleUserRound, href: "/signup" },
 ];
 
 export function BottomNav() {
   const location = useLocation();
   const currentPath = location.pathname;
-  // const { isAuthenticated, isModalOpen } = useAppStore();
-
-  // const handleNavClick = (item: NavItem) => {
-  //   if (item.authRequired && !isAuthenticated) {
-  //     router.push("/login");
-  //   } else {
-  //     router.push(item.href);
-  //   }
-  // };
 
   // Don't show on auth pages or booking flow pages
   const hideOnPaths = [
@@ -38,9 +30,6 @@ export function BottomNav() {
     "/vehicle",
     "/results",
   ];
-  // const shouldHide = hideOnPaths.some((path) => pathname.startsWith(path));
-
-  // if (shouldHide || isModalOpen) return null;
 
   return (
     <nav className="sticky bottom-0 left-0 right-0 z-50 bg-card border-t border-border safe-area-bottom">
@@ -52,7 +41,8 @@ export function BottomNav() {
 
           const Icon = item.icon;
           return (
-            <button
+            <Link
+              to={item.href}
               className={`flex flex-col items-center gap-1 px-6 py-3 min-w-[80px] transition-colors               ${
                 isActive
                   ? "text-primary"
@@ -61,7 +51,7 @@ export function BottomNav() {
             >
               <Icon className="h-5 w-5" />
               <span className={`text-xs`}>{item.label}</span>
-            </button>
+            </Link>
           );
         })}
       </div>

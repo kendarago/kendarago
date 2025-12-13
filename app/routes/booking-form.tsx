@@ -1,4 +1,4 @@
-import type { Route } from "./+types/bookingformscreen";
+import type { Route } from "./+types/booking-form";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
