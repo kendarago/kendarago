@@ -2,13 +2,13 @@ import type { Vehicle } from "~/lib/types";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
-  onClick: () => void;
+  // onClick: () => void;
 }
 
-export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
+export function VehicleCard({ vehicle }: VehicleCardProps) {
   return (
     <button
-      onClick={onClick}
+      // onClick={onClick}
       className="w-full bg-card rounded-2xl border border-border overflow-hidden text-left hover:border-primary/50 hover:shadow-md transition-all active:scale-[0.98]"
     >
       <div className="relative aspect-[4/3] bg-muted">
