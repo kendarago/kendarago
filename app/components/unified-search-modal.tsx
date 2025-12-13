@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { Input } from "~/components/ui/input";
-// import { useAppStore } from "~/lib/booking-store";
+import type { Location, Vehicle, VehicleCategory } from "~/lib/types";
 import {
   XIcon,
   NavigationIcon,
@@ -13,12 +13,25 @@ import {
   HotelIcon,
   SearchIcon,
   CalendarIcon,
+  Motorbike,
   CarIcon,
   ChevronLeftIcon,
   CheckIcon,
-  Motorbike,
 } from "lucide-react";
 import { format, addDays, isBefore, startOfDay } from "date-fns";
+
+// Location history type
+interface LocationHistory {
+  location: Location;
+  dates?: string;
+  timestamp: number;
+}
+
+// Date range type
+interface DateRange {
+  startDate: Date | null;
+  endDate: Date | null;
+}
 
 interface UnifiedSearchModalProps {
   isOpen: boolean;
@@ -65,30 +78,49 @@ export function UnifiedSearchModal({
   onClose,
 }: UnifiedSearchModalProps) {
   const navigate = useNavigate();
+
+  // Local state - replacing Zustand store
   const [activeTab, setActiveTab] = useState<TabType>("location");
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoadingGPS, setIsLoadingGPS] = useState(false);
   const [selectingEnd, setSelectingEnd] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [isModalOpen, setModalOpen] = useState(false);
-  // const {
-  //   currentLocation,
-  //   setLocation,
-  //   locationHistory,
-  //   addLocationToHistory,
-  //   rentalDateRange,
-  //   setRentalDateRange,
-  //   selectedCategory,
-  //   setSelectedCategory,
-  //   setModalOpen,
-  // } = useAppStore();
-  //
+
+  // Core state variables (previously from Zustand)
+  const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
+  const [locationHistory, setLocationHistory] = useState<LocationHistory[]>([]);
+  const [rentalDateRange, setRentalDateRange] = useState<DateRange>({
+    startDate: null,
+    endDate: null,
+  });
+  const [selectedCategory, setSelectedCategory] =
+    useState<VehicleCategory>("motorcycle");
+
   const today = startOfDay(new Date());
 
-  useeffect(() => {
-    setmodalopen(isopen);
-    return () => setmodalopen(false);
-  }, [isopen, setmodalopen]);
+  // Load data from localStorage on mount
+  useEffect(() => {
+    if (isOpen) {
+      const savedHistory = localStorage.getItem("riderent-location-history");
+      if (savedHistory) {
+        try {
+          setLocationHistory(JSON.parse(savedHistory));
+        } catch (e) {
+          console.error("Failed to parse location history", e);
+        }
+      }
+    }
+  }, [isOpen]);
+
+  // Save location history to localStorage
+  useEffect(() => {
+    if (locationHistory.length > 0) {
+      localStorage.setItem(
+        "riderent-location-history",
+        JSON.stringify(locationHistory),
+      );
+    }
+  }, [locationHistory]);
 
   useEffect(() => {
     if (isOpen) {
@@ -101,14 +133,28 @@ export function UnifiedSearchModal({
     };
   }, [isOpen]);
 
+  // Add location to history
+  const addLocationToHistory = useCallback(
+    (location: Location, dates?: string) => {
+      setLocationHistory((prev) => {
+        const filtered = prev.filter((h) => h.location.name !== location.name);
+        return [{ location, dates, timestamp: Date.now() }, ...filtered].slice(
+          0,
+          5,
+        );
+      });
+    },
+    [],
+  );
+
   // Location handlers
   const handleSelectLocation = useCallback(
-    (location: { name: string; lat: number; lng: number }) => {
+    (location: Location) => {
       addLocationToHistory(location);
-      setLocation(location);
+      setCurrentLocation(location);
       setActiveTab("dates");
     },
-    [addLocationToHistory, setLocation],
+    [addLocationToHistory],
   );
 
   const handleCurrentLocation = useCallback(() => {
@@ -245,6 +291,19 @@ export function UnifiedSearchModal({
 
   const handleSearch = () => {
     if (canSearch) {
+      // Save search data to localStorage for results page
+      localStorage.setItem(
+        "riderent-search-data",
+        JSON.stringify({
+          location: currentLocation,
+          dateRange: {
+            startDate: rentalDateRange.startDate?.toISOString(),
+            endDate: rentalDateRange.endDate?.toISOString(),
+          },
+          category: selectedCategory,
+        }),
+      );
+
       onClose();
       navigate("/results");
     }
@@ -737,7 +796,7 @@ export function UnifiedSearchModal({
             disabled={!canSearch}
             className={`w-full py-4 rounded-xl font-semibold text-base transition-all ${
               canSearch
-                ? "bg-primary text-primary-foreground hover: bg-primary/90"
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
                 : "bg-muted text-muted-foreground cursor-not-allowed"
             }`}
           >
