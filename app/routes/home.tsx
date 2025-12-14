@@ -12,7 +12,21 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export default function Home() {
+export async function loader({}: Route.LoaderArgs) {
+  const response = await fetch(
+    import.meta.env.VITE_BACKEND_API_URL + "/vehicles",
+  );
+  if (response.ok) {
+    const vehicles = await response.json();
+    console.log("Fetched Vehicles:", vehicles);
+    return { vehicles };
+  }
+  return null;
+}
+
+export default function Home({ loaderData }: Route.ComponentProps) {
+  const { vehicles } = loaderData;
+  console.log("Loader Data Vehicles:", vehicles);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const dateDisplay = "Any dates";
