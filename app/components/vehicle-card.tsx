@@ -1,4 +1,4 @@
-import type { Vehicle } from "~/lib/types";
+import type { Vehicle } from "~/lib/vehicles/schema";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -35,8 +35,6 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
       <div className="p-4">
         <div className="flex items-center gap-1 text-sm text-muted-foreground mb-1">
           <span>{vehicle.shopName}</span>
-          <span>•</span>
-          <span>{vehicle.distance} km</span>
         </div>
         <h3 className="font-semibold text-foreground">{vehicle.name}</h3>
         <p className="text-lg font-bold text-primary mt-2">

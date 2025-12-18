@@ -3,6 +3,7 @@ import { VehicleCard } from "~/components/vehicle-card";
 import type { Route } from "./+types/home";
 import { useState } from "react";
 import { UnifiedSearchModal } from "~/components/unified-search-modal";
+import type { Vehicle } from "~/lib/vehicles/schema";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -24,7 +25,7 @@ export async function loader({}: Route.LoaderArgs) {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { vehicles } = loaderData;
+  const { vehicles } = loaderData as { vehicles: Vehicle[] };
   console.log("Loader Data Vehicles:", vehicles);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -111,7 +112,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               {vehicles.length} available{" "}
               {vehicles.length === 1 ? "vehicle" : "vehicles"} within 15 km
             </p>
-            {vehicles.map((vehicle) => (
+            {vehicles.map((vehicle: Vehicle) => (
               <VehicleCard
                 key={vehicle.id}
                 vehicle={vehicle}
