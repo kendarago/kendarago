@@ -1,16 +1,21 @@
-import { useState, useContext } from "react";
+import { useState, useContext, createContext } from "react";
 
-const RentVehicles = useContext(null);
+type RentVehiclesContextType = {
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const RentVehiclesContext = createContext<RentVehiclesContextType | null>(null);
 
 export function RentVehiclesProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   return (
-    <RentVehiclesProvider value={{ isModalOpen, setIsModalOpen }}>
+    <RentVehiclesContext.Provider value={{ isModalOpen, setIsModalOpen }}>
       {children}
-    </RentVehiclesProvider>
+    </RentVehiclesContext.Provider>
   );
 }
