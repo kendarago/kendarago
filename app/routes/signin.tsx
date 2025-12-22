@@ -1,48 +1,57 @@
 import type { Route } from "./+types/signin";
-import { Form, redirect, type Session } from "react-router";
+import { Form, redirect } from "react-router";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-// // import { getSession, commitSession } from "../sessions";
+import { getSession, commitSession } from "../sessions";
 import { z } from "zod";
-// export function meta({}: Route.MetaArgs) {
-//   return [{ title: "Login" }];
-// }
 
-// export async function action({ request }: Route.ActionArgs) {
-//   const session = await getSession(request.headers.get("Cookie"));
-//   if (session.has("token")) {
-//     return redirect("/dashboard");
-//   }
+export function meta({}: Route.MetaArgs) {
+  return [{ title: "Signin" }];
+}
 
-//   const formData = await request.formData();
+//signin validation with zod
+export const signinValidation = () => {
+  return z.object({
+    email: z.string().email("Invalid Email Format"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+  });
+};
 
-//   const email = formData.get("email");
-//   const password = formData.get("password");
+export async function action({ request }: Route.ActionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  if (session.has("token")) {
+    return redirect("/dashboard");
+  }
 
-//   const loginBody = {
-//     email,
-//     password,
-//   };
+  const formData = await request.formData();
 
-//   const response = await fetch(
-//     `${import.meta.env.VITE_BACKEND_API_URL}/auth/login`,
-//     {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(loginBody),
-//     }
-//   );
-//   const token = await response.json();
+  const email = formData.get("email");
+  const password = formData.get("password");
 
-//   session.set("token", token);
+  const signinBody = {
+    email,
+    password,
+  };
 
-//   return redirect("/dashboard", {
-//     headers: {
-//       "Set-Cookie": await commitSession(session),
-//     },
-//   });
-// }
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_API_URL}/auth/signin`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(signinBody),
+    }
+  );
+  const token = await response.json();
+
+  session.set("token", token);
+
+  return redirect("/dashboard", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
+}
 
 export default function SignInRoute({}: Route.ComponentProps) {
   return (
