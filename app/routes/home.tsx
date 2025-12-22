@@ -14,7 +14,7 @@ export function meta({}: Route.MetaArgs) {
 
 export async function loader({}: Route.LoaderArgs) {
   const response = await fetch(
-    import.meta.env.VITE_BACKEND_API_URL + "/vehicles",
+    import.meta.env.VITE_BACKEND_API_URL + "/vehicles"
   );
   console.log(response);
   if (response.ok) {
@@ -76,7 +76,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 key={i}
                 className="bg-card rounded-2xl border border-border overflow-hidden animate-pulse"
               >
-                <div className="aspect-[4/3] bg-muted" />
+                <div className="aspect-4/3 bg-muted" />
                 <div className="p-4 space-y-2">
                   <div className="h-5 w-3/4 bg-muted rounded" />
                   <div className="h-4 w-1/2 bg-muted rounded" />
