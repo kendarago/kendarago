@@ -1,9 +1,9 @@
 import { MapPinIcon, SearchIcon } from "lucide-react";
 import { VehicleCard } from "~/components/vehicle-card";
 import type { Route } from "./+types/home";
-import { mockVehicles } from "~/lib/mock-data";
 import { useState } from "react";
 import { UnifiedSearchModal } from "~/components/unified-search-modal";
+import type { Vehicle } from "~/lib/vehicles/schema";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -16,8 +16,9 @@ export async function loader({}: Route.LoaderArgs) {
   const response = await fetch(
     import.meta.env.VITE_BACKEND_API_URL + "/vehicles",
   );
+  console.log(response);
   if (response.ok) {
-    const vehicles = await response.json();
+    const vehicles = (await response.json()).data as Vehicle[];
     console.log("Fetched Vehicles:", vehicles);
     return { vehicles };
   }
@@ -25,7 +26,7 @@ export async function loader({}: Route.LoaderArgs) {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { vehicles } = loaderData;
+  const { vehicles } = loaderData as { vehicles: Vehicle[] };
   console.log("Loader Data Vehicles:", vehicles);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,7 +85,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               </div>
             ))}
           </div>
-        ) : mockVehicles.length === 0 ? (
+        ) : vehicles.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
               <MapPinIcon className="h-8 w-8 text-muted-foreground" />
@@ -109,10 +110,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         ) : (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              {mockVehicles.length} available{" "}
-              {mockVehicles.length === 1 ? "vehicle" : "vehicles"} within 15 km
+              {vehicles.length} available{" "}
+              {vehicles.length === 1 ? "vehicle" : "vehicles"} within 15 km
             </p>
-            {mockVehicles.map((vehicle) => (
+            {vehicles.map((vehicle: Vehicle) => (
               <VehicleCard
                 key={vehicle.id}
                 vehicle={vehicle}
