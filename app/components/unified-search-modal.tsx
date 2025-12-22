@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useContext, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { Input } from "~/components/ui/input";
 import type { Location, Vehicle, VehicleCategory } from "~/lib/types";
@@ -19,6 +19,7 @@ import {
   CheckIcon,
 } from "lucide-react";
 import { format, addDays, isBefore, startOfDay } from "date-fns";
+import { useRentVehicles } from "~/context/rent-vehicles-context";
 
 // Location history type
 interface LocationHistory {
@@ -79,6 +80,7 @@ export function UnifiedSearchModal({
 }: UnifiedSearchModalProps) {
   const navigate = useNavigate();
 
+  const { setIsModalOpen } = useRentVehicles();
   // Local state - replacing Zustand store
   const [activeTab, setActiveTab] = useState<TabType>("location");
   const [searchQuery, setSearchQuery] = useState("");
@@ -101,6 +103,7 @@ export function UnifiedSearchModal({
   // Load data from localStorage on mount
   useEffect(() => {
     if (isOpen) {
+      setIsModalOpen(isOpen);
       const savedHistory = localStorage.getItem("riderent-location-history");
       if (savedHistory) {
         try {

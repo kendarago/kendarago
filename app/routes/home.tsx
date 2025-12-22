@@ -27,7 +27,6 @@ export async function loader({}: Route.LoaderArgs) {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const { vehicles } = loaderData as { vehicles: Vehicle[] };
-  console.log("Loader Data Vehicles:", vehicles);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const dateDisplay = "Any dates";
