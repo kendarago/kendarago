@@ -7,40 +7,40 @@ import { Label } from "../components/ui/label";
 import { Card, CardContent } from "../components/ui/card";
 import { z, ZodError } from "zod";
 
-// export function meta({}: Route.MetaArgs) {
-//   return [{ title: "Register" }];
-// }
+export function meta({}: Route.MetaArgs) {
+  return [{ title: "Sign Up" }];
+}
 
-// export async function clientAction({ request }: Route.ClientActionArgs) {
-//   const formData = await request.formData();
+export async function clientAction({ request }: Route.ClientActionArgs) {
+  const formData = await request.formData();
 
-//   const fullName = formData.get("fullName");
-//   const email = formData.get("email");
-//   const password = formData.get("password");
+  const fullName = formData.get("fullName");
+  const email = formData.get("email");
+  const password = formData.get("password");
 
-//   const registerBody = {
-//     fullName,
-//     email,
-//     password,
-//   };
+  const registerBody = {
+    fullName,
+    email,
+    password,
+  };
 
-//   const response = await fetch(
-//     `${import.meta.env.VITE_BACKEND_API_URL}/auth/register`,
-//     {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(registerBody),
-//     }
-//   );
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_API_URL}/auth/signup`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(registerBody),
+    }
+  );
 
-//   const result = await response.json();
-//   console.log(result);
+  const result = await response.json();
+  console.log(result);
 
-//   return redirect("/login");
-// }
+  return redirect("/signin");
+}
 
 //VALIDATION WITH ZOD
-export const registerValidation = () => {
+export const signupValidation = () => {
   return z
     .object({
       fullName: z.string().min(3, "Full name is required"),
@@ -55,8 +55,8 @@ export const registerValidation = () => {
       path: ["confirmPassword"],
     });
 };
-// Register Form Component
-export default function RegisterRoute() {
+// Signup Form Component
+export default function signupRoute() {
   const [errors, setErrors] = useState<any>({});
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -65,7 +65,7 @@ export default function RegisterRoute() {
     const form = new FormData(e.currentTarget);
     const data = Object.fromEntries(form.entries());
 
-    const schema = registerValidation();
+    const schema = signupValidation();
     const result = schema.safeParse(data);
 
     // if (!result.success) {
