@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router";
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate, createSearchParams } from "react-router";
 import { Input } from "~/components/ui/input";
 import type { Location, Vehicle, VehicleCategory } from "~/lib/types";
 import {
@@ -307,8 +307,21 @@ export function UnifiedSearchModal({
         }),
       );
 
-      onClose();
-      navigate("/results");
+      console.log("localStorage", localStorage.getItem("riderent-search-data"));
+
+      if (!rentalDateRange.startDate || !rentalDateRange.endDate) {
+        // Show error message or prevent form submission
+        alert("Please select both start and end dates.");
+        return;
+      }
+      const searchParams = createSearchParams({
+        location: currentLocation.name,
+        startDate: rentalDateRange.startDate?.toISOString(),
+        endDate: rentalDateRange.endDate?.toISOString(),
+        category: selectedCategory,
+      });
+      // onClose();
+      // navigate("/results");
     }
   };
 
@@ -794,6 +807,7 @@ export function UnifiedSearchModal({
 
         {/* Search Button */}
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-background border-t border-border safe-area-bottom">
+          {/* TODO: Make this button work */}
           <button
             onClick={handleSearch}
             disabled={!canSearch}
