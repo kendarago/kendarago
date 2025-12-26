@@ -320,8 +320,11 @@ export function UnifiedSearchModal({
         endDate: rentalDateRange.endDate?.toISOString(),
         category: selectedCategory,
       });
-      // onClose();
-      // navigate("/results");
+      onClose();
+      navigate({
+        pathname: "/result-search",
+        search: `?${searchParams.toString()}`,
+      });
     }
   };
 
