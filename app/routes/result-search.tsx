@@ -1,14 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useLoaderData } from "react-router";
-// import { useAppStore } from "~/lib/booking-store";
+import { VehicleCard } from "~/components/vehicle-card";
 import type { Vehicle } from "~/lib/types";
-import {
-  ChevronLeftIcon,
-  FilterIcon,
-  MapPinIcon,
-  HeartIcon,
-  StarIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, FilterIcon, MapPinIcon } from "lucide-react";
 import { FilterModal } from "~/components/filter-modal";
 import { format } from "date-fns";
 import type { Route } from "./+types/result-search";
@@ -37,75 +31,71 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 }
 
-export default function ResultSearch() {
-  const loaderData = useLoaderData<typeof loader>();
+export default function ResultSearch({ loaderData }: Route.ComponentProps) {
+  const { vehicles } = loaderData as { vehicles: Vehicle[] };
   const navigate = useNavigate();
-  const {
-    currentLocation,
-    filters,
-    setFilters,
-    resetFilters,
-    setSelectedVehicle,
-    selectedCategory,
-    rentalDateRange,
-    favorites,
-    toggleFavorite,
-  } = useAppStore();
+  // const {
+  //   currentLocation,
+  //   filters,
+  //   setFilters,
+  //   resetFilters,
+  //   setSelectedVehicle,
+  //   selectedCategory,
+  //   rentalDateRange,
+  // } = useAppStore();
 
-  const [vehicles, setVehicles] = useState<Vehicle[]>(
-    loaderData?.vehicles || [],
-  );
-  const [isLoading, setIsLoading] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const [showMap, setShowMap] = useState(true);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [showFilters, setShowFilters] = useState(false);
+  // const [showMap, setShowMap] = useState(true);
 
   // Apply filters to loaded vehicles
-  const applyFilters = useCallback(() => {
-    if (!loaderData?.vehicles) return [];
-
-    let filtered = [...loaderData.vehicles];
-
-    // Apply price range filter
-    filtered = filtered.filter(
-      (v) =>
-        v.pricePerDay >= filters.priceRange[0] &&
-        v.pricePerDay <= filters.priceRange[1],
-    );
-
-    // Apply vehicle type filter
-    if (filters.vehicleType) {
-      filtered = filtered.filter((v) => v.type === filters.vehicleType);
-    }
-
-    // Apply sorting
-    if (filters.sortBy === "cheapest") {
-      filtered.sort((a, b) => a.pricePerDay - b.pricePerDay);
-    } else if (filters.sortBy === "closest") {
-      filtered.sort((a, b) => a.distance - b.distance);
-    }
-
-    return filtered;
-  }, [loaderData?.vehicles, filters]);
-
+  // const applyFilters = useCallback(() => {
+  //   if (!loaderData?.vehicles) return [];
+  //
+  //   let filtered = [...loaderData.vehicles];
+  //
+  //   // Apply price range filter
+  //   filtered = filtered.filter(
+  //     (v) =>
+  //       v.pricePerDay >= filters.priceRange[0] &&
+  //       v.pricePerDay <= filters.priceRange[1],
+  //   );
+  //
+  //   // Apply vehicle type filter
+  //   if (filters.vehicleType) {
+  //     filtered = filtered.filter((v) => v.type === filters.vehicleType);
+  //   }
+  //
+  //   // Apply sorting
+  //   if (filters.sortBy === "cheapest") {
+  //     filtered.sort((a, b) => a.pricePerDay - b.pricePerDay);
+  //   } else if (filters.sortBy === "closest") {
+  //     filtered.sort((a, b) => a.distance - b.distance);
+  //   }
+  //
+  //   return filtered;
+  // }, [loaderData?.vehicles, filters]);
+  //
   // Update vehicles when filters change
-  useEffect(() => {
-    const filtered = applyFilters();
-    setVehicles(filtered);
-  }, [applyFilters]);
+  // useEffect(() => {
+  //   const filtered = applyFilters();
+  //   setVehicles(filtered);
+  // }, [applyFilters]);
 
   const handleVehicleClick = (vehicle: Vehicle) => {
-    setSelectedVehicle(vehicle);
+    // setSelectedVehicle(vehicle);
     navigate(`/vehicle/${vehicle.id}`);
   };
 
-  const activeFilterCount = [
-    filters.priceRange[0] > 0 || filters.priceRange[1] < 100,
-    filters.vehicleType !== null,
-    filters.sortBy !== "closest",
-  ].filter(Boolean).length;
+  // const activeFilterCount = [
+  //   filters.priceRange[0] > 0 || filters.priceRange[1] < 100,
+  //   filters.vehicleType !== null,
+  //   filters.sortBy !== "closest",
+  // ].filter(Boolean).length;
 
   // Build header display
-  const locationName = currentLocation?.name || "Anywhere";
+  const locationName = "Anywhere";
+  // const locationName = currentLocation?.name || "Anywhere";
   const dateDisplay =
     rentalDateRange.startDate && rentalDateRange.endDate
       ? `${format(rentalDateRange.startDate, "MMM d")} – ${format(rentalDateRange.endDate, "MMM d")}`
@@ -148,17 +138,17 @@ export default function ResultSearch() {
             <span className="text-xs text-muted-foreground">{dateDisplay}</span>
           </button>
 
-          <button
-            onClick={() => setShowFilters(true)}
-            className="relative p-2 rounded-full border border-border hover:shadow-md transition-shadow"
-          >
-            <FilterIcon className="h-5 w-5 text-foreground" />
-            {activeFilterCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-                {activeFilterCount}
-              </span>
-            )}
-          </button>
+          {/* <button */}
+          {/*   onClick={() => setShowFilters(true)} */}
+          {/*   className="relative p-2 rounded-full border border-border hover:shadow-md transition-shadow" */}
+          {/* > */}
+          {/*   <FilterIcon className="h-5 w-5 text-foreground" /> */}
+          {/*   {activeFilterCount > 0 && ( */}
+          {/*     <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center"> */}
+          {/*       {activeFilterCount} */}
+          {/*     </span> */}
+          {/*   )} */}
+          {/* </button> */}
         </div>
       </header>
 
@@ -287,12 +277,10 @@ export default function ResultSearch() {
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {vehicles.map((vehicle) => (
-              <VehicleResultCard
+              <VehicleCard
                 key={vehicle.id}
                 vehicle={vehicle}
                 rentalDays={rentalDays}
-                isFavorite={favorites.includes(vehicle.id)}
-                onFavoriteToggle={() => toggleFavorite(vehicle.id)}
                 onClick={() => handleVehicleClick(vehicle)}
               />
             ))}
@@ -301,113 +289,13 @@ export default function ResultSearch() {
       </main>
 
       {/* Filter Modal */}
-      <FilterModal
-        isOpen={showFilters}
-        onClose={() => setShowFilters(false)}
-        filters={filters}
-        onApply={setFilters}
-        onReset={resetFilters}
-      />
-    </div>
-  );
-}
-
-// Vehicle Result Card Component (Airbnb style)
-interface VehicleResultCardProps {
-  vehicle: Vehicle;
-  rentalDays: number;
-  isFavorite: boolean;
-  onFavoriteToggle: () => void;
-  onClick: () => void;
-}
-
-function VehicleResultCard({
-  vehicle,
-  rentalDays,
-  isFavorite,
-  onFavoriteToggle,
-  onClick,
-}: VehicleResultCardProps) {
-  const totalPrice = vehicle.pricePerDay * rentalDays;
-  const isPopular = vehicle.pricePerDay < 30;
-
-  return (
-    <div className="group">
-      {/* Image Container */}
-      <div className="relative aspect-square rounded-xl overflow-hidden mb-2">
-        <button onClick={onClick} className="w-full h-full">
-          <img
-            src={vehicle.image || "/placeholder.svg"}
-            alt={vehicle.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        </button>
-
-        {/* Guest Favorite Badge */}
-        {isPopular && (
-          <div className="absolute top-2 left-2 bg-card/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1">
-            <span className="text-xs">⭐</span>
-            <span className="text-xs font-medium text-foreground">
-              Guest favorite
-            </span>
-          </div>
-        )}
-
-        {/* Favorite Button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onFavoriteToggle();
-          }}
-          className="absolute top-2 right-2 p-1.5"
-        >
-          <HeartIcon
-            className={`h-6 w-6 drop-shadow-md transition-colors ${
-              isFavorite
-                ? "fill-red-500 text-red-500"
-                : "fill-black/30 text-white"
-            }`}
-          />
-        </button>
-
-        {/* Image Dots (carousel indicator) */}
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
-          {[1, 2, 3, 4].map((dot, i) => (
-            <div
-              key={dot}
-              className={`w-1.5 h-1.5 rounded-full ${i === 0 ? "bg-white" : "bg-white/50"}`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Info */}
-      <button onClick={onClick} className="w-full text-left">
-        <div className="flex items-start justify-between gap-1">
-          <h3 className="font-semibold text-foreground text-sm line-clamp-1">
-            {vehicle.name}
-          </h3>
-          <div className="flex items-center gap-0.5 shrink-0">
-            <StarIcon className="h-3 w-3 fill-foreground text-foreground" />
-            <span className="text-xs font-medium text-foreground">4.9</span>
-          </div>
-        </div>
-        <p className="text-xs text-muted-foreground line-clamp-1">
-          {vehicle.shopName}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          {vehicle.distance} km away
-        </p>
-        <p className="mt-1">
-          <span className="font-semibold text-foreground text-sm">
-            ${totalPrice}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {" "}
-            for {rentalDays} days
-          </span>
-        </p>
-      </button>
+      {/* <FilterModal */}
+      {/*   isOpen={showFilters} */}
+      {/*   onClose={() => setShowFilters(false)} */}
+      {/*   filters={filters} */}
+      {/*   onApply={setFilters} */}
+      {/*   onReset={resetFilters} */}
+      {/* /> */}
     </div>
   );
 }
