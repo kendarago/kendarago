@@ -320,6 +320,7 @@ export function UnifiedSearchModal({
         endDate: rentalDateRange.endDate?.toISOString(),
         category: selectedCategory,
       });
+      setIsModalOpen(false);
       onClose();
       navigate({
         pathname: "/result-search",
@@ -421,66 +422,22 @@ export function UnifiedSearchModal({
                 </div>
               </div>
 
-              {/* Quick Actions */}
-              {!searchQuery && (
-                <div className="border-b border-border">
-                  <button
-                    onClick={handleCurrentLocation}
-                    disabled={isLoadingGPS}
-                    className="flex items-center gap-4 w-full px-4 py-3.5 hover:bg-secondary/50 transition-colors text-left"
-                  >
-                    <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-full">
-                      <NavigationIcon className="h-5 w-5 text-primary" />
-                    </div>
-                    <span className="font-medium text-foreground">
-                      {isLoadingGPS
-                        ? "Getting location..."
-                        : "Current location"}
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={handleAnywhere}
-                    className="flex items-center gap-4 w-full px-4 py-3.5 hover:bg-secondary/50 transition-colors text-left"
-                  >
-                    <div className="flex items-center justify-center w-10 h-10 bg-secondary rounded-full">
-                      <GlobeIcon className="h-5 w-5 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-foreground">Anywhere</p>
-                      <p className="text-sm text-muted-foreground">
-                        Browse all vehicles
-                      </p>
-                    </div>
-                  </button>
-                </div>
-              )}
-
-              {/* History Section */}
-              {!searchQuery && locationHistory.length > 0 && (
+              {/* Cities */}
+              {filteredCities.length > 0 && (
                 <div className="border-b border-border">
                   <p className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                    History
+                    Cities
                   </p>
-                  {locationHistory.map((item, index) => (
+                  {filteredCities.map((city, index) => (
                     <button
                       key={index}
-                      onClick={() => handleSelectLocation(item.location)}
+                      onClick={() => handleSelectLocation(city)}
                       className="flex items-center gap-4 w-full px-4 py-3 hover:bg-secondary/50 transition-colors text-left"
                     >
                       <div className="flex items-center justify-center w-10 h-10 bg-secondary rounded-full">
-                        <HistoryIcon className="h-5 w-5 text-muted-foreground" />
+                        <BuildingIcon className="h-5 w-5 text-muted-foreground" />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-primary truncate">
-                          {item.location.name}
-                        </p>
-                        {item.dates && (
-                          <p className="text-sm text-muted-foreground">
-                            {item.dates}
-                          </p>
-                        )}
-                      </div>
+                      <p className="font-medium text-foreground">{city.name}</p>
                     </button>
                   ))}
                 </div>
@@ -504,27 +461,6 @@ export function UnifiedSearchModal({
                       <p className="font-medium text-foreground truncate">
                         {airport.name}
                       </p>
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Cities */}
-              {filteredCities.length > 0 && (
-                <div className="border-b border-border">
-                  <p className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                    Cities
-                  </p>
-                  {filteredCities.map((city, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleSelectLocation(city)}
-                      className="flex items-center gap-4 w-full px-4 py-3 hover:bg-secondary/50 transition-colors text-left"
-                    >
-                      <div className="flex items-center justify-center w-10 h-10 bg-secondary rounded-full">
-                        <BuildingIcon className="h-5 w-5 text-muted-foreground" />
-                      </div>
-                      <p className="font-medium text-foreground">{city.name}</p>
                     </button>
                   ))}
                 </div>
