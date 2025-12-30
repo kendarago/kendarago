@@ -38,7 +38,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
         </div>
         <h3 className="font-semibold text-foreground">{vehicle.name}</h3>
         <p className="text-lg font-bold text-primary mt-2">
-          ${vehicle.pricePerDay}
+          Rp{vehicle.pricePerDay}
           <span className="text-sm font-normal text-muted-foreground">
             /day
           </span>

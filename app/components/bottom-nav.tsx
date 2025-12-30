@@ -1,8 +1,7 @@
 import type React from "react";
 import { SearchIcon, Icon, CircleUserRound } from "lucide-react";
 import { Link, useLocation, useParams } from "react-router";
-// import { SearchIcon, MapPinnedIcon, HeartIcon } from "./icons";
-// import { useAppStore } from "~/lib/booking-store";
+import { useRentVehicles } from "~/context/rent-vehicles-context";
 
 interface NavItem {
   label: string;
@@ -20,6 +19,16 @@ const navItems: NavItem[] = [
 export function BottomNav() {
   const location = useLocation();
   const currentPath = location.pathname;
+  const { isModalOpen } = useRentVehicles();
+  // const { isAuthenticated, isModalOpen } = useAppStore();
+
+  // const handleNavClick = (item: NavItem) => {
+  //   if (item.authRequired && !isAuthenticated) {
+  //     router.push("/login");
+  //   } else {
+  //     router.push(item.href);
+  //   }
+  // };
 
   // Don't show on auth pages or booking flow pages
   const hideOnPaths = [
@@ -30,6 +39,9 @@ export function BottomNav() {
     "/vehicle",
     "/results",
   ];
+
+  // if (shouldHide || isModalOpen) return null;
+  if (isModalOpen) return null;
 
   return (
     <nav className="sticky bottom-0 left-0 right-0 z-50 bg-card border-t border-border safe-area-bottom">
