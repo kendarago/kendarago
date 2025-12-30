@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, createSearchParams } from "react-router";
-import { Input } from "~/components/ui/input";
+import { Input } from "../components/ui/input";
 import type { Location, Vehicle, VehicleCategory } from "~/lib/types";
 import {
   XIcon,
@@ -19,7 +19,7 @@ import {
   CheckIcon,
 } from "lucide-react";
 import { format, addDays, isBefore, startOfDay } from "date-fns";
-import { useRentVehicles } from "~/context/rent-vehicles-context";
+import { useRentVehicles } from "../context/rent-vehicles-context";
 
 // Location history type
 interface LocationHistory {
@@ -120,7 +120,7 @@ export function UnifiedSearchModal({
     if (locationHistory.length > 0) {
       localStorage.setItem(
         "riderent-location-history",
-        JSON.stringify(locationHistory),
+        JSON.stringify(locationHistory)
       );
     }
   }, [locationHistory]);
@@ -143,11 +143,11 @@ export function UnifiedSearchModal({
         const filtered = prev.filter((h) => h.location.name !== location.name);
         return [{ location, dates, timestamp: Date.now() }, ...filtered].slice(
           0,
-          5,
+          5
         );
       });
     },
-    [],
+    []
   );
 
   // Location handlers
@@ -157,7 +157,7 @@ export function UnifiedSearchModal({
       setCurrentLocation(location);
       setActiveTab("dates");
     },
-    [addLocationToHistory],
+    [addLocationToHistory]
   );
 
   const handleCurrentLocation = useCallback(() => {
@@ -180,7 +180,7 @@ export function UnifiedSearchModal({
       () => {
         setIsLoadingGPS(false);
       },
-      { timeout: 10000, enableHighAccuracy: true },
+      { timeout: 10000, enableHighAccuracy: true }
     );
   }, [handleSelectLocation]);
 
@@ -223,7 +223,7 @@ export function UnifiedSearchModal({
   // Filter locations
   const filterLocations = (locations: typeof airports) =>
     locations.filter((loc) =>
-      loc.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      loc.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
   const filteredAirports = filterLocations(airports);
@@ -281,7 +281,7 @@ export function UnifiedSearchModal({
       Math.ceil(
         (rentalDateRange.endDate.getTime() -
           rentalDateRange.startDate.getTime()) /
-          (1000 * 60 * 60 * 24),
+          (1000 * 60 * 60 * 24)
       ) + 1;
     return diff;
   };
@@ -304,7 +304,7 @@ export function UnifiedSearchModal({
             endDate: rentalDateRange.endDate?.toISOString(),
           },
           category: selectedCategory,
-        }),
+        })
       );
 
       console.log("localStorage", localStorage.getItem("riderent-search-data"));
@@ -603,8 +603,8 @@ export function UnifiedSearchModal({
                     setCurrentMonth(
                       new Date(
                         currentMonth.getFullYear(),
-                        currentMonth.getMonth() - 1,
-                      ),
+                        currentMonth.getMonth() - 1
+                      )
                     )
                   }
                   className="p-2 hover:bg-secondary rounded-full transition-colors"
@@ -619,8 +619,8 @@ export function UnifiedSearchModal({
                     setCurrentMonth(
                       new Date(
                         currentMonth.getFullYear(),
-                        currentMonth.getMonth() + 1,
-                      ),
+                        currentMonth.getMonth() + 1
+                      )
                     )
                   }
                   className="p-2 hover: bg-secondary rounded-full transition-colors rotate-180"

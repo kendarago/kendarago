@@ -14,6 +14,6 @@ export default [
     route("bookingform", "./routes/booking-form.tsx"),
     route("resultsearch", "./routes/result-search.tsx"),
     route("signout", "./routes/signout.tsx"),
-    route("bookingformscreen", "./routes/bookingformscreen.tsx"),
+    // route("bookingformscreen", "./routes/bookingformscreen.tsx"),
   ]),
 ] satisfies RouteConfig;

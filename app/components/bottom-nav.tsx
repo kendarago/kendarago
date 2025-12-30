@@ -1,7 +1,7 @@
 import type React from "react";
 import { SearchIcon, Icon, CircleUserRound } from "lucide-react";
 import { Link, useLocation, useParams } from "react-router";
-import { useRentVehicles } from "~/context/rent-vehicles-context";
+import { useRentVehicles } from "../context/rent-vehicles-context";
 
 interface NavItem {
   label: string;
@@ -55,7 +55,7 @@ export function BottomNav() {
           return (
             <Link
               to={item.href}
-              className={`flex flex-col items-center gap-1 px-6 py-3 min-w-[80px] transition-colors               ${
+              className={`flex flex-col items-center gap-1 px-6 py-3 min-w-20 transition-colors               ${
                 isActive
                   ? "text-primary"
                   : "text-muted-foreground hover:text-foreground"

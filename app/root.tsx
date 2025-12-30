@@ -6,7 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-import { RentVehiclesProvider } from "~/context/rent-vehicles-context";
+import { RentVehiclesProvider } from "./context/rent-vehicles-context";
 
 import type { Route } from "./+types/root";
 import "./app.css";
