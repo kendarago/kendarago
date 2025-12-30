@@ -18,8 +18,7 @@ export async function loader({}: Route.LoaderArgs) {
   );
   console.log(response);
   if (response.ok) {
-    const vehicles = (await response.json()).data as Vehicle[];
-    console.log("Fetched Vehicles:", vehicles);
+    const vehicles = await response.json();
     return { vehicles };
   }
   return null;
