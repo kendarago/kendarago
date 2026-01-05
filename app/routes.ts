@@ -12,7 +12,6 @@ export default [
     route("signup", "./routes/signup.tsx"), // POST /auth/signup
     route("dashboard", "routes/dashboard.tsx"), //get/auth/me
     route("bookingform", "./routes/booking-form.tsx"),
-    route("resultsearch", "./routes/result-search.tsx"),
-    route("signout", "./routes/signout.tsx"),
+    route("result-search", "routes/result-search.tsx"),
   ]),
 ] satisfies RouteConfig;
