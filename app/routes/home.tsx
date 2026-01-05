@@ -1,9 +1,9 @@
 import { MapPinIcon, SearchIcon } from "lucide-react";
-import { VehicleCard } from "~/components/vehicle-card";
+import { VehicleCard } from "../components/vehicle-card";
 import type { Route } from "./+types/home";
 import { useState } from "react";
-import { UnifiedSearchModal } from "~/components/unified-search-modal";
-import type { Vehicle } from "~/lib/vehicles/schema";
+import { UnifiedSearchModal } from "../components/unified-search-modal";
+import type { Vehicle } from "../lib/vehicles/schema";
 
 export function meta({}: Route.MetaArgs) {
   return [

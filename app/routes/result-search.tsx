@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useLoaderData } from "react-router";
-import { VehicleCard } from "~/components/vehicle-card";
-import type { Vehicle } from "~/lib/types";
+import { VehicleCard } from "../components/vehicle-card";
+import type { Vehicle } from "../lib/types";
 import { ChevronLeftIcon, FilterIcon, MapPinIcon } from "lucide-react";
-import { FilterModal } from "~/components/filter-modal";
+import { FilterModal } from "../components/filter-modal";
 import { format } from "date-fns";
 import type { Route } from "./+types/result-search";
 
@@ -25,7 +25,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const queryString = new URLSearchParams(params).toString();
   try {
     const response = await fetch(
-      import.meta.env.VITE_BACKEND_API_URL + "/vehicles?" + queryString,
+      import.meta.env.VITE_BACKEND_API_URL + "/vehicles?" + queryString
     );
     const vehicles = await response.json();
 

@@ -1,131 +1,83 @@
+import { getSession } from "../sessions";
 import type { Route } from "./+types/dashboard";
-import { Form, redirect, type Session } from "react-router";
-import { Label } from "../components/ui/label";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
-// import { getSession, commitSession } from "../sessions";
-import { z } from "zod";
+import type { UserAuthMe } from "../modules/user";
+import { Card, CardContent } from "../components/ui/card";
+import { redirect } from "react-router";
+import { User } from "lucide-react";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Dashboard" }];
 }
 
-//signin validation with zod
-// export const signinValidation = () => {
-//   return z.object({
-//     email: z.string().email("Invalid Email Format"),
-//     password: z.string().min(8, "Password must be at least 8 characters"),
-//   });
-// };
+export async function loader({ request }: Route.ClientLoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const token = session.get("token");
 
-// export async function action({ request }: Route.ActionArgs) {
-//   const session = await getSession(request.headers.get("Cookie"));
-//   if (session.has("token")) {
-//     return redirect("/dashboard");
-//   }
+  if (!session.has("token")) {
+    return redirect("/signin");
+  }
 
-//   const formData = await request.formData();
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_API_URL}/auth/me`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  const user: UserAuthMe = await response.json();
+  return { user };
+}
 
-//   const email = formData.get("email");
-//   const password = formData.get("password");
+export default function DashboardRoute({ loaderData }: Route.ComponentProps) {
+  const { user } = loaderData;
 
-//   const signinBody = {
-//     email,
-//     password,
-//   };
-
-//   const response = await fetch(
-//     `${import.meta.env.VITE_BACKEND_API_URL}/auth/signin`,
-//     {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(signinBody),
-//     }
-//   );
-//   const token = await response.json();
-
-//   session.set("token", token);
-
-//   return redirect("/dashboard", {
-//     headers: {
-//       "Set-Cookie": await commitSession(session),
-//     },
-//   });
-// }
-
-//
-export default function SignInRoute({}: Route.ComponentProps) {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 space-y-8 transition-all duration-300 hover:shadow-2xl">
-        {/* Title */}
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-extrabold text-gray-900">
-            Welcome Back
-          </h1>
-          <p className="text-sm text-gray-500">Continue to your account</p>
+    <div className="flex items-center justify-center min-h-screen bg-slate-50 p-4">
+      {/* Container dengan border dashed biru sesuai gambar */}
+      <div className="relative border-2 border-dashed border-blue-400 p-1">
+        {/* Label Kendarago di bagian atas */}
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-50 px-2 z-10">
+          <span className="text-xs font-mono border border-dotted border-blue-500 px-1 bg-white">
+            Kendarago
+          </span>
         </div>
 
-        {/* Form */}
-        <Form method="POST" className="space-y-6">
-          {/* Email Field */}
-          <div className="space-y-2">
-            <Label
-              htmlFor="email"
-              className="text-sm font-medium text-gray-700 block"
-            >
-              Email Address
-            </Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              placeholder="you@example.com"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
-            />
-          </div>
+        <Card className="w-[450px] border-none shadow-none bg-transparent">
+          <CardContent className="pt-12 pb-16 px-8">
+            {/* Avatar Section */}
+            <div className="flex flex-col items-center mb-12">
+              <div className="border-[1.5px] border-black p-2 mb-4 bg-white">
+                <User className="h-10 w-10 text-black" strokeWidth={1.5} />
+              </div>
+            </div>
 
-          {/* Password Field */}
-          <div className="space-y-2">
-            <Label
-              htmlFor="password"
-              className="text-sm font-medium text-gray-700 block"
-            >
-              Password
-            </Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              placeholder="••••••••"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
-            />
-          </div>
+            {/* Info Section */}
+            <div className="space-y-5">
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-semibold text-slate-900">
+                  {user.fullName}
+                </span>
+                <span className="text-lg text-teal-500 font-medium"></span>
+              </div>
 
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            className="w-full py-3 bg-black hover:bg-gray-900 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
-          >
-            Sign In
-          </Button>
-        </Form>
-
-        {/* Footer Link */}
-        <div className="text-center text-sm text-gray-600 mt-4">
-          Don’t have an account?{" "}
-          <a
-            href="/register"
-            className="text-black-600 hover:underline font-medium"
-          >
-            Register here
-          </a>
-        </div>
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-semibold text-slate-900">
+                  {user.email}
+                </span>
+                <button className="text-lg text-teal-500 font-medium hover:underline transition-all"></button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 }
+//     <div className="flex flex-col items-center">
+//       <div className="w-full max-w-xs">
+//         <h1>Dashboard</h1>
+//         <Card>
+//           <h2>{user.fullName}</h2>
+//           <p>{user.email}</p>
+//         </Card>
+//       </div>
+//     </div>
+//   );
+// }

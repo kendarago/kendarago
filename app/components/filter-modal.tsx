@@ -85,7 +85,7 @@ export function FilterModal({
             </Label>
             <Slider
               value={localFilters.priceRange}
-              onValueChange={(value) =>
+              onValueChange={(value: [number, number]) =>
                 setLocalFilters({
                   ...localFilters,
                   priceRange: value as [number, number],
@@ -104,7 +104,7 @@ export function FilterModal({
             </Label>
             <Select
               value={localFilters.vehicleType || "all"}
-              onValueChange={(value) =>
+              onValueChange={(value: string | null) =>
                 setLocalFilters({
                   ...localFilters,
                   vehicleType: value === "all" ? null : value,
@@ -116,7 +116,7 @@ export function FilterModal({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All types</SelectItem>
-                {vehicleTypes.map((type) => (
+                {vehicleTypes.map((type: { value: any; label: any }) => (
                   <SelectItem key={type.value} value={type.value}>
                     {type.label}
                   </SelectItem>
@@ -146,7 +146,7 @@ export function FilterModal({
                   >
                     {option.charAt(0).toUpperCase() + option.slice(1)}
                   </button>
-                ),
+                )
               )}
             </div>
           </div>
@@ -168,4 +168,8 @@ export function FilterModal({
       </div>
     </>
   );
+}
+
+function useAppStore(): { selectedCategory: any; setModalOpen: any } {
+  throw new Error("Function not implemented.");
 }
