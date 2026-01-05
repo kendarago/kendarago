@@ -18,8 +18,7 @@ export async function loader({}: Route.LoaderArgs) {
   );
   console.log(response);
   if (response.ok) {
-    const vehicles = (await response.json()).data as Vehicle[];
-    console.log("Fetched Vehicles:", vehicles);
+    const vehicles = await response.json();
     return { vehicles };
   }
   return null;
@@ -27,9 +26,7 @@ export async function loader({}: Route.LoaderArgs) {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const { vehicles } = loaderData as { vehicles: Vehicle[] };
-  console.log("Loader Data Vehicles:", vehicles);
   const [showSearchModal, setShowSearchModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const dateDisplay = "Any dates";
   const vehicleDisplay = "Vehicles";
   return (

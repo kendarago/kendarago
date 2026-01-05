@@ -4,7 +4,7 @@ export const VehicleSchema = z.object({
   id: z.string(),
   rentalCompanySlug: z.string(),
   engineCapacity: z.string(),
-  imageUrl: z.string().optional(),
+  imageUrl: z.string(),
   brand: z.string(),
   name: z.string(),
   seatCapacity: z.number(),
