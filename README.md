@@ -29,8 +29,8 @@ Table of Contents:
 
 ## Links
 
-- Website/Frontend:
-  - Backend:
+- Website/Frontend: <https://kendarago.netlify.app/>
+  - Backend: <https://kendarago-api.onrender.com/>
 - Repositories:
   - Backend: <https://github.com/kendarago/kendarago-api>
   - Frontend: <https://github.com/kendarago/kendarago>
