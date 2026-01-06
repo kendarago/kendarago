@@ -20,6 +20,10 @@ export async function loader({ request }: Route.LoaderArgs) {
     location: url.searchParams.get("location") || "",
     startDate: url.searchParams.get("startDate") || "",
     endDate: url.searchParams.get("endDate") || "",
+    available:
+      url.searchParams.get("startDate") && url.searchParams.get("endDate")
+        ? "true"
+        : "false",
     category: url.searchParams.get("category") || "",
   };
   const queryString = new URLSearchParams(params).toString();
@@ -27,6 +31,8 @@ export async function loader({ request }: Route.LoaderArgs) {
     const response = await fetch(
       import.meta.env.VITE_BACKEND_API_URL + "/vehicles?" + queryString
     );
+    console.log({ response });
+
     const vehicles = await response.json();
 
     return { vehicles: vehicles, params };
