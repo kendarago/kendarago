@@ -127,10 +127,9 @@ export default function RentalForm() {
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Rental Period
             </h3>
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="flex justify-between gap-2 mb-6">
               <div>
-                <label className="block text-sm text-gray-600 mb-2">From</label>
-                <DatePicker label="start date" />
+                <DatePicker label="From" />
                 {/* <DatePicker */}
                 {/*   selected={startDate} */}
                 {/*   onChange={(date: Date | null) => setStartDate(date)} */}
@@ -143,7 +142,7 @@ export default function RentalForm() {
                 {/* /> */}
               </div>
               <div>
-                <label className="block text-sm text-gray-600 mb-2">To</label>
+                <DatePicker label="To" />
                 {/* <DatePicker */}
                 {/*   selected={endDate} */}
                 {/*   onChange={(date: Date | null) => setEndDate(date)} */}
