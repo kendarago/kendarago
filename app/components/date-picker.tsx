@@ -20,7 +20,7 @@ export function DatePicker({ label, className }: DatePickerProp) {
   const [date, setDate] = React.useState<Date | undefined>(undefined);
 
   return (
-    <div className={`flex flex-col gap-3${className ? className : ""}`}>
+    <div className={`flex flex-col flex-1${className ? className : ""}`}>
       <label htmlFor="date" className="block text-sm text-gray-600 mb-2">
         {label}
       </label>
@@ -29,7 +29,7 @@ export function DatePicker({ label, className }: DatePickerProp) {
           <Button
             variant="outline"
             id="date"
-            className="w-48 justify-between font-normal"
+            className="w-full justify-between font-normal"
           >
             {date ? date.toLocaleDateString() : "Select date"}
             <ChevronDownIcon />

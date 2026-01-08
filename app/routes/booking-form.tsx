@@ -127,33 +127,9 @@ export default function RentalForm() {
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Rental Period
             </h3>
-            <div className="flex justify-between gap-2 mb-6">
-              <div>
+            <div className="flex gap-2 mb-6">
                 <DatePicker label="From" />
-                {/* <DatePicker */}
-                {/*   selected={startDate} */}
-                {/*   onChange={(date: Date | null) => setStartDate(date)} */}
-                {/*   selectsStart */}
-                {/*   startDate={startDate} */}
-                {/*   endDate={endDate} */}
-                {/*   minDate={new Date()} */}
-                {/*   placeholderText="Choose start date" */}
-                {/*   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer" */}
-                {/* /> */}
-              </div>
-              <div>
                 <DatePicker label="To" />
-                {/* <DatePicker */}
-                {/*   selected={endDate} */}
-                {/*   onChange={(date: Date | null) => setEndDate(date)} */}
-                {/*   selectsEnd */}
-                {/*   startDate={startDate} */}
-                {/*   endDate={endDate} */}
-                {/*   minDate={startDate || new Date()} */}
-                {/*   placeholderText="Choose end date" */}
-                {/*   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer" */}
-                {/* /> */}
-              </div>
             </div>
 
             {/* Date error */}
