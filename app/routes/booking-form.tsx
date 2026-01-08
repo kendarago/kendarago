@@ -1,8 +1,7 @@
 import type { Route } from "./+types/booking-form";
-import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
-import DatePicker from "react-datepicker";
 import { differenceInDays } from "date-fns";
+import { DatePicker } from "~/components/date-picker";
 import { z } from "zod";
 
 // ──────────────────────────────────────────────────────────────
@@ -128,33 +127,9 @@ export default function RentalForm() {
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Rental Period
             </h3>
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div>
-                <label className="block text-sm text-gray-600 mb-2">From</label>
-                <DatePicker
-                  selected={startDate}
-                  onChange={(date: Date | null) => setStartDate(date)}
-                  selectsStart
-                  startDate={startDate}
-                  endDate={endDate}
-                  minDate={new Date()}
-                  placeholderText="Choose start date"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 mb-2">To</label>
-                <DatePicker
-                  selected={endDate}
-                  onChange={(date: Date | null) => setEndDate(date)}
-                  selectsEnd
-                  startDate={startDate}
-                  endDate={endDate}
-                  minDate={startDate || new Date()}
-                  placeholderText="Choose end date"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer"
-                />
-              </div>
+            <div className="flex gap-2 mb-6">
+                <DatePicker label="From" />
+                <DatePicker label="To" />
             </div>
 
             {/* Date error */}
