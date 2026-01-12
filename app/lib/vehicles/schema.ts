@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const VehicleSchema = z.object({
   id: z.string(),
+  slug: z.string(),
   rentalCompanySlug: z.string(),
   engineCapacity: z.string(),
   imageUrl: z.string(),

@@ -31,17 +31,22 @@ export function BottomNav() {
   // };
 
   // Don't show on auth pages or booking flow pages
-  const hideOnPaths = [
+  const hideOnPaths: String[] = [
     "/login",
     "/register",
     "/booking",
     "/confirmation",
-    "/vehicle",
+    "/vehicle-detail",
     "/results",
   ];
 
-  // if (shouldHide || isModalOpen) return null;
-  if (isModalOpen) return null;
+  console.log({ locationPath: location.pathname, isModalOpen });
+
+  const shouldHide = hideOnPaths.some((path) =>
+    location.pathname.startsWith(path.toString())
+  );
+  if (shouldHide || isModalOpen) return null;
+  // if (isModalOpen) return null;
 
   return (
     <nav className="sticky bottom-0 left-0 right-0 z-50 bg-card border-t border-border safe-area-bottom">

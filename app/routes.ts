@@ -14,7 +14,7 @@ export default [
     route("booking-form", "./routes/booking-form.tsx"),
     route("result-search", "routes/result-search.tsx"),
     route(
-      "vehicles/:rentalCompanySlug/:vehicleId",
+      "vehicle-detail/:rentalCompanySlug/:vehicleSlug",
       "routes/vehicle-detail.tsx",
     ),
   ]),
