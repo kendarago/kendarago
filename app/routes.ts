@@ -13,5 +13,9 @@ export default [
     route("dashboard", "routes/dashboard.tsx"), //get/auth/me
     route("booking-form", "./routes/booking-form.tsx"),
     route("result-search", "routes/result-search.tsx"),
+    route(
+      "vehicle-detail/:rentalCompanySlug/:vehicleSlug",
+      "routes/vehicle-detail.tsx",
+    ),
   ]),
 ] satisfies RouteConfig;
