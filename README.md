@@ -93,7 +93,6 @@ flowchart TD
   - Full address
   - Phone number / WhatsApp
   - Operating hours
-- Fallback: text-based search if GPS is disabled
 
 ### 2. Vehicle Filtering & Sorting
 
@@ -106,30 +105,21 @@ flowchart TD
   - Lowest price → Highest
   - Highest price → Lowest
   - Nearest distance
-- Real-time filtering & sorting (without page reload)
 
 ### 3. Vehicle & Rental Details
 
 - Detail page per rental / per motorcycle with:
-  - Vehicle photos (multiple)
-  - Real-time status: Available / Booked / Maintenance
+  - Vehicle photos 
   - Motorcycle type & brand
   - Base price (starting from ... /day)
-  - Additional costs:
-    - Overtime per hour
-    - Delivery / Pick-up (if available)
   - Rental terms & conditions
   - Required documents (ID Card, Driver's License C, etc.)
   - Direct contact button (Phone / WhatsApp)
-- Automatic status update via polling or WebSocket (optional in MVP)
 
 ## UI Designs
 
 - Figma: <https://www.figma.com/design/g4WZixh4KQUw449yd3IddI/KendaraGo?node-id=22-3&t=ZIrMH33e78VcZfhV-1>
 
-### Home Page
-
-<img alt="Home Page" src="./designs/home.jpg" width="400" />
 
 ## Entity Relationship Diagram (ERD)
 
@@ -144,7 +134,7 @@ Detailed design: [https://dbdiagram.io/d/6924ddf7228c5bbc1a51f3ee](https://dbdia
 Install the dependencies:
 
 ```bash
-npm install
+bun install
 ```
 
 ### Development
@@ -152,7 +142,7 @@ npm install
 Start the development server with HMR:
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 Your application will be available at `http://localhost:5173`.
@@ -162,7 +152,7 @@ Your application will be available at `http://localhost:5173`.
 Create a production build:
 
 ```bash
-npm run build
+bun run build
 ```
 
 ## Deployment
@@ -191,11 +181,11 @@ The containerized application can be deployed to any platform that supports Dock
 
 If you're familiar with deploying Node applications, the built-in app server is production-ready.
 
-Make sure to deploy the output of `npm run build`
+Make sure to deploy the output of `bun run build`
 
 ```
 ├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
+├── package-lock.json (or pbun-lock.yaml, or bun.lockb)
 ├── build/
 │   ├── client/    # Static assets
 │   └── server/    # Server-side code
