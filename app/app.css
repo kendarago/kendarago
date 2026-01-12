@@ -7,6 +7,19 @@
   --font-sans:
     "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* Primary color palette */
+  --color-primary-50: #eefffb;
+  --color-primary-100: #c6fff6;
+  --color-primary-200: #8effee;
+  --color-primary-300: #4dfbe5;
+  --color-primary-400: #19e8d4;
+  --color-primary-500: #00c4b4;
+  --color-primary-600: #00a49b;
+  --color-primary-700: #02837d;
+  --color-primary-800: #086764;
+  --color-primary-900: #0c5552;
+  --color-primary-950: #003434;
 }
 
 html,
@@ -64,7 +77,7 @@ body {
   --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.648 0.2 131.684);
+  --primary: var(--color-primary-600);
   --primary-foreground: oklch(0.986 0.031 120.757);
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
