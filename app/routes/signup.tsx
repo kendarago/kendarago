@@ -216,13 +216,11 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
   // ZOD FAILED
   if (!parsed.success) {
-    console.log("VALIDATION FAILED:", parsed.error.format());
     return {
       fieldErrors: parsed.error.format(),
     };
   }
 
-  console.log("VALIDATION PASSED:", parsed.data);
 
   const registerBody = {
     fullName: parsed.data.fullName,
@@ -239,7 +237,6 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
   );
 
   const result = await response.json();
-  console.log("BACKEND RESPONSE:", result);
 
   // BACKEND FAILED
   if (!response.ok) {

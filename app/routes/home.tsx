@@ -16,7 +16,6 @@ export async function loader({}: Route.LoaderArgs) {
   const response = await fetch(
     import.meta.env.VITE_BACKEND_API_URL + "/vehicles",
   );
-  console.log(response);
   if (response.ok) {
     const vehicles = await response.json();
     return { vehicles };
