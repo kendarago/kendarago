@@ -307,7 +307,6 @@ export function UnifiedSearchModal({
         }),
       );
 
-      console.log("localStorage", localStorage.getItem("riderent-search-data"));
 
       if (!rentalDateRange.startDate || !rentalDateRange.endDate) {
         // Show error message or prevent form submission

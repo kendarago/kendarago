@@ -40,7 +40,6 @@ export function BottomNav() {
     "/results",
   ];
 
-  console.log({ locationPath: location.pathname, isModalOpen });
 
   const shouldHide = hideOnPaths.some((path) =>
     location.pathname.startsWith(path.toString())
