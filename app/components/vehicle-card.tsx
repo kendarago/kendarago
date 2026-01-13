@@ -14,9 +14,9 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
     >
       <div className="relative aspect-[4/3] bg-muted">
         <img
-          src={vehicle.imageurl || "/images/vehicle_no_img.png"}
+          src={vehicle.imageUrl || "/images/vehicle_no_img.png"}
           alt={vehicle.name}
-          classname="object-cover"
+          className="object-cover"
         />
       </div>
       <div className="p-4">
