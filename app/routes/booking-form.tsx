@@ -99,7 +99,6 @@ export default function RentalForm() {
     }
 
     alert("Form submitted successfully! Proceeding to payment");
-    console.log({ fullName, phone, startDate, endDate, totalPrice, fileName });
   };
 
   return (

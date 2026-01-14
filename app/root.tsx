@@ -7,6 +7,7 @@ import {
   ScrollRestoration,
 } from "react-router";
 import { RentVehiclesProvider } from "./context/rent-vehicles-context";
+import { getSession } from "./sessions";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -27,6 +28,15 @@ export const links: Route.LinksFunction = () => [
     href: "/images/kendarago_bulat.png",
   },
 ];
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const token = session.get("token");
+  
+  return {
+    isAuthenticated: !!token,
+  };
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

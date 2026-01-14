@@ -1,6 +1,6 @@
 import type React from "react";
-import { SearchIcon, Icon, CircleUserRound } from "lucide-react";
-import { Link, useLocation, useParams } from "react-router";
+import { SearchIcon, Icon, CircleUserRound, LogOut } from "lucide-react";
+import { Link, useLocation, useParams, useRouteLoaderData } from "react-router";
 import { useRentVehicles } from "../context/rent-vehicles-context";
 
 interface NavItem {
@@ -8,19 +8,44 @@ interface NavItem {
   icon: React.ComponentType<{ className?: string }>;
   href: string;
   authRequired?: boolean;
+  showWhenAuthenticated?: boolean;
+  showWhenNotAuthenticated?: boolean;
 }
 
 const navItems: NavItem[] = [
-  { label: "Search", icon: SearchIcon, href: "/" },
-  { label: "Sign In", icon: CircleUserRound, href: "/signin" },
-  { label: "Sign Up", icon: CircleUserRound, href: "/signup" },
+  { 
+    label: "Search", 
+    icon: SearchIcon, 
+    href: "/",
+    showWhenAuthenticated: true,
+    showWhenNotAuthenticated: true,
+  },
+  { 
+    label: "Sign In", 
+    icon: CircleUserRound, 
+    href: "/signin",
+    showWhenNotAuthenticated: true,
+  },
+  { 
+    label: "Sign Up", 
+    icon: CircleUserRound, 
+    href: "/signup",
+    showWhenNotAuthenticated: true,
+  },
+  {
+    label: "Profile",
+    icon: CircleUserRound,
+    href: "/profile",
+    showWhenAuthenticated: true,
+  },
 ];
 
 export function BottomNav() {
   const location = useLocation();
   const currentPath = location.pathname;
   const { isModalOpen } = useRentVehicles();
-  // const { isAuthenticated, isModalOpen } = useAppStore();
+  const rootData = useRouteLoaderData<{ isAuthenticated: boolean }>("root");
+  const isAuthenticated = rootData?.isAuthenticated ?? false;
 
   // const handleNavClick = (item: NavItem) => {
   //   if (item.authRequired && !isAuthenticated) {
@@ -45,12 +70,20 @@ export function BottomNav() {
     location.pathname.startsWith(path.toString())
   );
   if (shouldHide || isModalOpen) return null;
-  // if (isModalOpen) return null;
+
+  // Filter nav items based on authentication status
+  const visibleNavItems = navItems.filter((item) => {
+    if (isAuthenticated) {
+      return item.showWhenAuthenticated === true;
+    } else {
+      return item.showWhenNotAuthenticated === true;
+    }
+  });
 
   return (
     <nav className="sticky bottom-0 left-0 right-0 z-50 bg-card border-t border-border safe-area-bottom">
       <div className="flex items-center justify-around">
-        {navItems.map((item) => {
+        {visibleNavItems.map((item) => {
           const isActive =
             currentPath === item.href ||
             (item.href !== "/" && currentPath.startsWith(item.href));
