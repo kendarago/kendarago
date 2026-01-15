@@ -1,10 +1,12 @@
 import type { Route } from "./+types/signin";
+import { useState } from "react";
 import { Form, redirect } from "react-router";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { getSession, commitSession } from "../sessions";
 import { z } from "zod";
+import { Eye, EyeOff } from "lucide-react";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Signin" }];
@@ -13,7 +15,7 @@ export function meta({}: Route.MetaArgs) {
 //signin validation with zod
 export const signinValidation = () => {
   return z.object({
-    email: z.string().email("Invalid Email Format"),
+    email: z.email("Invalid Email Format"),
     password: z.string().min(8, "Password must be at least 8 characters"),
   });
 };
@@ -34,26 +36,41 @@ export async function action({ request }: Route.ActionArgs) {
     password,
   };
 
-  const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_API_URL}/auth/signin`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(signinBody),
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_API_URL}/auth/signin`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(signinBody),
+      },
+    );
+
+    if (response.status !== 200) {
+      const error = await response.json();
+      console.log("Signin error:", error);
+      return { error: error.message || "Signin failed" };
     }
-  );
-  const token = await response.json();
 
-  session.set("token", token);
+    const token = await response.json();
 
-  return redirect("/dashboard", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
-  });
+    session.set("token", token);
+
+    return redirect("/dashboard", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  } catch (error) {
+    console.error("Signin request failed:", error);
+    return {
+      error: "Network error. Please check your connection and try again.",
+    };
+  }
 }
 
-export default function SignInRoute({}: Route.ComponentProps) {
+export default function SignInRoute({ actionData }: Route.ComponentProps) {
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 space-y-8 transition-all duration-300 hover:shadow-2xl">
@@ -87,24 +104,40 @@ export default function SignInRoute({}: Route.ComponentProps) {
           </div>
 
           {/* Password Field */}
+
           <div className="space-y-2">
-            <Label
+            <label
               htmlFor="password"
               className="text-sm font-medium text-gray-700 block"
             >
-              Password
-            </Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              placeholder="••••••••"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
-            />
+              password
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                required
+                placeholder="••••••••"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
-
+          {/* Error Message */}
+          {actionData?.error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+              <p className="text-sm font-medium">{actionData.error}</p>
+            </div>
+          )}
           {/* Submit Button */}
           <Button
             type="submit"

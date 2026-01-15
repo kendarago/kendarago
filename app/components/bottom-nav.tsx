@@ -13,29 +13,29 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { 
-    label: "Search", 
-    icon: SearchIcon, 
+  {
+    label: "Search",
+    icon: SearchIcon,
     href: "/",
     showWhenAuthenticated: true,
     showWhenNotAuthenticated: true,
   },
-  { 
-    label: "Sign In", 
-    icon: CircleUserRound, 
+  {
+    label: "Sign In",
+    icon: CircleUserRound,
     href: "/signin",
     showWhenNotAuthenticated: true,
   },
-  { 
-    label: "Sign Up", 
-    icon: CircleUserRound, 
+  {
+    label: "Sign Up",
+    icon: CircleUserRound,
     href: "/signup",
     showWhenNotAuthenticated: true,
   },
   {
-    label: "Profile",
+    label: "Dashboard",
     icon: CircleUserRound,
-    href: "/profile",
+    href: "/dashboard",
     showWhenAuthenticated: true,
   },
 ];
@@ -65,9 +65,8 @@ export function BottomNav() {
     "/results",
   ];
 
-
   const shouldHide = hideOnPaths.some((path) =>
-    location.pathname.startsWith(path.toString())
+    location.pathname.startsWith(path.toString()),
   );
   if (shouldHide || isModalOpen) return null;
 
