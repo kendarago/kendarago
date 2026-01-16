@@ -3,10 +3,8 @@ import { useState } from "react";
 import { differenceInDays } from "date-fns";
 import { DatePicker } from "~/components/date-picker";
 import { z } from "zod";
+import { VehicleRentalPicker } from "~/components/vehicle-rental-picker";
 
-// ──────────────────────────────────────────────────────────────
-// Zod Schema (English messages)
-// ──────────────────────────────────────────────────────────────
 const rentalSchema = z.object({
   fullName: z
     .string()
@@ -23,9 +21,6 @@ const rentalSchema = z.object({
 
 type RentalFormData = z.infer<typeof rentalSchema>;
 
-// ──────────────────────────────────────────────────────────────
-// Component
-// ──────────────────────────────────────────────────────────────
 export default function RentalForm() {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -126,11 +121,16 @@ export default function RentalForm() {
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Rental Period
             </h3>
-            <div className="flex gap-2 mb-6">
-                <DatePicker label="From" />
-                <DatePicker label="To" />
-            </div>
+            {/* <div className="flex gap-2 mb-6"> */}
+            {/*   <DatePicker label="From" /> */}
+            {/* </div> */}
+            {/* <div className="flex gap-2 mb-6"> */}
+            {/*   <DatePicker label="To" /> */}
+            {/* </div> */}
 
+            <div className="flex gap-2 mb-6">
+              <VehicleRentalPicker />
+            </div>
             {/* Date error */}
             {errors.date && (
               <p className="text-red-500 text-sm -mt-4 mb-4">{errors.date}</p>
