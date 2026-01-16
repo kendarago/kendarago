@@ -149,67 +149,33 @@ export default function RentalForm() {
               </div>
             )}
 
-            {/* Full Name */}
-            <div className="mb-5">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name
-              </label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Enter your full name"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-              />
-              {errors.fullName && (
-                <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
-              )}
-            </div>
-
-            {/* WhatsApp */}
-            <div className="mb-5">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                WhatsApp Number
-              </label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+62 812 3456 7890"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-              />
-              {errors.phone && (
-                <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-              )}
-            </div>
-
             {/* Upload ID */}
-            <div className="mb-5">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Photo of ID (KTP/SIM)
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  onChange={handleFileChange}
-                  className="hidden"
-                  id="ktp"
-                />
-                <label htmlFor="ktp" className="cursor-pointer">
-                  <span className="text-teal-600 font-medium underline">
-                    Choose File
-                  </span>{" "}
-                  <span className="text-gray-500">{fileName}</span>
-                </label>
-                <p className="text-xs text-gray-500 mt-2">
-                  Max 5 MB | JPG, PNG or PDF
-                </p>
-              </div>
-              {errors.file && (
-                <p className="text-red-500 text-sm mt-1">{errors.file}</p>
-              )}
-            </div>
+            {/* <div className="mb-5"> */}
+            {/*   <label className="block text-sm font-medium text-gray-700 mb-2"> */}
+            {/*     Photo of ID (KTP/SIM) */}
+            {/*   </label> */}
+            {/*   <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center"> */}
+            {/*     <input */}
+            {/*       type="file" */}
+            {/*       accept=".jpg,.jpeg,.png,.pdf" */}
+            {/*       onChange={handleFileChange} */}
+            {/*       className="hidden" */}
+            {/*       id="ktp" */}
+            {/*     /> */}
+            {/*     <label htmlFor="ktp" className="cursor-pointer"> */}
+            {/*       <span className="text-teal-600 font-medium underline"> */}
+            {/*         Choose File */}
+            {/*       </span>{" "} */}
+            {/*       <span className="text-gray-500">{fileName}</span> */}
+            {/*     </label> */}
+            {/*     <p className="text-xs text-gray-500 mt-2"> */}
+            {/*       Max 5 MB | JPG, PNG or PDF */}
+            {/*     </p> */}
+            {/*   </div> */}
+            {/*   {errors.file && ( */}
+            {/*     <p className="text-red-500 text-sm mt-1">{errors.file}</p> */}
+            {/*   )} */}
+            {/* </div> */}
 
             {/* Agreement */}
             <div className="flex items-start gap-3 mb-6">

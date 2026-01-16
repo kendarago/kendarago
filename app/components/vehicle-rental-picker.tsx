@@ -1,6 +1,4 @@
-"use client";
-
-import * as React from "react";
+import { useState } from "react";
 import { ChevronDownIcon } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -14,21 +12,42 @@ import {
 } from "~/components/ui/popover";
 
 export function VehicleRentalPicker() {
-  const [openFrom, setOpenFrom] = React.useState(false);
-  const [openTo, setOpenTo] = React.useState(false);
-  const [dateFrom, setDateFrom] = React.useState<Date | undefined>(
-    new Date("2025-06-01"),
-  );
-  const [dateTo, setDateTo] = React.useState<Date | undefined>(
-    new Date("2025-06-03"),
-  );
+  const [openFrom, setOpenFrom] = useState(false);
+  const [openTo, setOpenTo] = useState(false);
+  const [dateFrom, setDateFrom] = useState<Date | undefined>(new Date());
+  const [dateTo, setDateTo] = useState<Date | undefined>(new Date());
+  const [timeFrom, setTimeFrom] = useState<string>("10:30:00");
+  const [timeTo, setTimeTo] = useState<string>("12:30:00");
+  const [timeError, setTimeError] = useState<string | null>(null);
+  function validateTimes(
+    from: Date | undefined,
+    to: Date | undefined,
+    timeFrom: string,
+    timeTo: string,
+  ) {
+    if (!from || !to) {
+      setTimeError("");
+      return true;
+    }
+
+    // Check if same day
+    const isSameDay = from.toDateString() === to.toDateString();
+
+    if (isSameDay && timeFrom < timeTo) {
+      setTimeError("End time must be after start time on the same day");
+      return false;
+    }
+
+    setTimeError("");
+    return true;
+  }
 
   return (
-    <div className="flex w-full max-w-64 min-w-0 flex-col gap-6">
+    <div className="flex w-full flex-col gap-6">
       <div className="flex gap-4">
         <div className="flex flex-1 flex-col gap-3">
           <Label htmlFor="date-from" className="px-1">
-            Check-in
+            For
           </Label>
           <Popover open={openFrom} onOpenChange={setOpenFrom}>
             <PopoverTrigger asChild>
@@ -57,8 +76,12 @@ export function VehicleRentalPicker() {
                 captionLayout="dropdown"
                 onSelect={(date) => {
                   setDateFrom(date);
+                  if (dateTo && date && date > dateTo) {
+                    setDateTo(date);
+                  }
                   setOpenFrom(false);
                 }}
+                disabled={{ before: new Date() }}
               />
             </PopoverContent>
           </Popover>
@@ -71,7 +94,11 @@ export function VehicleRentalPicker() {
             type="time"
             id="time-from"
             step="1"
-            defaultValue="10:30:00"
+            value={timeFrom}
+            onChange={(e) => {
+              setTimeFrom(e.target.value);
+              validateTimes(dateFrom, dateTo, e.target.value, timeTo);
+            }}
             className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           />
         </div>
@@ -79,7 +106,7 @@ export function VehicleRentalPicker() {
       <div className="flex gap-4">
         <div className="flex flex-1 flex-col gap-3">
           <Label htmlFor="date-to" className="px-1">
-            Check-out
+            To
           </Label>
           <Popover open={openTo} onOpenChange={setOpenTo}>
             <PopoverTrigger asChild>
@@ -123,11 +150,16 @@ export function VehicleRentalPicker() {
             type="time"
             id="time-to"
             step="1"
-            defaultValue="12:30:00"
+            value={timeTo}
+            onChange={(e) => {
+              setTimeTo(e.target.value);
+              validateTimes(dateFrom, dateTo, timeFrom, e.target.value);
+            }}
             className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           />
         </div>
       </div>
+      {timeError && <p className="text-sm text-red-500">{timeError}</p>}
     </div>
   );
 }
