@@ -8,7 +8,6 @@ import { VehicleRentalPicker } from "~/components/vehicle-rental-picker";
 import type { UserAuthMe } from "../modules/user";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { Card } from "~/components/ui/card";
 import { formatRupiah } from "~/lib/utils/format-rupiah";
 
 const rentalSchema = z.object({
@@ -98,6 +97,9 @@ export default function RentalForm({ loaderData }: Route.ComponentProps) {
   const days =
     startDate && endDate ? differenceInDays(endDate, startDate) + 1 : 0;
   const totalPrice = days * pricePerDay;
+
+  // Check if form is valid
+  const isFormValid = startDate && endDate && days > 0 && agreed;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -199,24 +201,25 @@ export default function RentalForm({ loaderData }: Route.ComponentProps) {
               Rental Period
             </h3>
             <div className="flex gap-2">
-              <VehicleRentalPicker />
+              <VehicleRentalPicker 
+                onDateChange={(start, end) => {
+                  setStartDate(start);
+                  setEndDate(end);
+                }}
+              />
             </div>
             {errors.date && (
               <p className="text-red-500 text-sm mt-2">{errors.date}</p>
             )}
+            {/* Price Calculation */}
+            {days > 0 && (
+              <div className="mt-4 bg-teal-50 rounded-xl p-4">
+                <p className="text-base font-medium text-gray-700">
+                  {formatRupiah(pricePerDay)}/day x {days} days = <span className="font-bold text-teal-600">{formatRupiah(totalPrice)} total</span>
+                </p>
+              </div>
+            )}
           </div>
-
-          {/* Total Price */}
-          {days > 0 && (
-            <div className="bg-primary/10 rounded-xl p-5 text-center">
-              <p className="text-lg font-medium text-foreground">
-                IDR {pricePerDay.toLocaleString("id-ID")}/day x {days} days
-              </p>
-              <p className="text-2xl font-bold text-primary mt-1">
-                Total: IDR {totalPrice.toLocaleString("id-ID")}
-              </p>
-            </div>
-          )}
 
           {/* Agreement */}
           <div className="flex items-start gap-3">
@@ -242,16 +245,14 @@ export default function RentalForm({ loaderData }: Route.ComponentProps) {
       {/* Fixed Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-4">
         <div className="flex items-center justify-between gap-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Total Price</p>
-            <p className="text-xl font-bold">
-              {days > 0
-                ? `IDR ${totalPrice.toLocaleString("id-ID")}`
-                : `IDR ${pricePerDay.toLocaleString("id-ID")}/day`}
-            </p>
-          </div>
-          <Button size="lg" className="px-8" onClick={handleSubmit}>
-            Continue to Payment
+          
+          <Button 
+            size="lg" 
+            className="px-8 w-full" 
+            onClick={handleSubmit}
+            disabled={!isFormValid}
+          >
+            {isFormValid ? "Confirmation & Pay" : "Please fill all fields correctly"}
           </Button>
         </div>
       </div>
