@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDownIcon } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -11,7 +11,11 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 
-export function VehicleRentalPicker() {
+interface VehicleRentalPickerProps {
+  onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
+}
+
+export function VehicleRentalPicker({ onDateChange }: VehicleRentalPickerProps) {
   const [openFrom, setOpenFrom] = useState(false);
   const [openTo, setOpenTo] = useState(false);
   const [dateFrom, setDateFrom] = useState<Date | undefined>(new Date());
@@ -19,6 +23,13 @@ export function VehicleRentalPicker() {
   const [timeFrom, setTimeFrom] = useState<string>("10:30:00");
   const [timeTo, setTimeTo] = useState<string>("12:30:00");
   const [timeError, setTimeError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (onDateChange) {
+      onDateChange(dateFrom || null, dateTo || null);
+    }
+  }, [dateFrom, dateTo, onDateChange]);
+
   function validateTimes(
     from: Date | undefined,
     to: Date | undefined,
