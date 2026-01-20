@@ -4,11 +4,11 @@ import { differenceInDays } from "date-fns";
 import { z } from "zod";
 import { redirect, Link, useLoaderData } from "react-router";
 import { getSession } from "../sessions";
-import { VehicleRentalPicker } from "~/components/vehicle-rental-picker";
+import { VehicleRentalPicker } from "../components/vehicle-rental-picker";
 import type { UserAuthMe } from "../modules/user";
 import { ArrowLeft } from "lucide-react";
-import { Button } from "~/components/ui/button";
-import { formatRupiah } from "~/lib/utils/format-rupiah";
+import { Button } from "../components/ui/button";
+import { formatRupiah } from "../lib/utils/format-rupiah";
 
 const rentalSchema = z.object({
   fullName: z
@@ -201,7 +201,7 @@ export default function RentalForm({ loaderData }: Route.ComponentProps) {
               Rental Period
             </h3>
             <div className="flex gap-2">
-              <VehicleRentalPicker 
+              <VehicleRentalPicker
                 onDateChange={(start, end) => {
                   setStartDate(start);
                   setEndDate(end);
@@ -215,7 +215,10 @@ export default function RentalForm({ loaderData }: Route.ComponentProps) {
             {days > 0 && (
               <div className="mt-4 bg-teal-50 rounded-xl p-4">
                 <p className="text-base font-medium text-gray-700">
-                  {formatRupiah(pricePerDay)}/day x {days} days = <span className="font-bold text-teal-600">{formatRupiah(totalPrice)} total</span>
+                  {formatRupiah(pricePerDay)}/day x {days} days ={" "}
+                  <span className="font-bold text-teal-600">
+                    {formatRupiah(totalPrice)} total
+                  </span>
                 </p>
               </div>
             )}
@@ -245,14 +248,15 @@ export default function RentalForm({ loaderData }: Route.ComponentProps) {
       {/* Fixed Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-4">
         <div className="flex items-center justify-between gap-4">
-          
-          <Button 
-            size="lg" 
-            className="px-8 w-full" 
+          <Button
+            size="lg"
+            className="px-8 w-full"
             onClick={handleSubmit}
             disabled={!isFormValid}
           >
-            {isFormValid ? "Confirmation & Pay" : "Please fill all fields correctly"}
+            {isFormValid
+              ? "Confirmation & Pay"
+              : "Please fill all fields correctly"}
           </Button>
         </div>
       </div>

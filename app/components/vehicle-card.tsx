@@ -1,5 +1,5 @@
 import type { Vehicle } from "~/lib/vehicles/schema";
-import { formatRupiah } from "~/lib/utils/format-rupiah";
+import { formatRupiah } from "../lib/utils/format-rupiah";
 import { Button } from "./ui/button";
 import { Link } from "react-router";
 interface VehicleCardProps {
@@ -12,7 +12,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
       to={`/vehicle-detail/${vehicle.rentalCompanySlug}/${vehicle.slug}`}
       className="block w-full bg-card rounded-2xl border border-border overflow-hidden text-left hover:border-primary/50 hover:shadow-md transition-all active:scale-[0.98]"
     >
-      <div className="relative aspect-[4/3] bg-muted">
+      <div className="relative aspect-4/3 bg-muted">
         <img
           src={vehicle.imageUrl || "/images/vehicle_no_img.png"}
           alt={vehicle.name}
