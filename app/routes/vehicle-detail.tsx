@@ -299,7 +299,11 @@ export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
             <p className="text-xl font-bold">IDR 150,000/day</p>
           </div>
           <Button size="lg" className="px-8" asChild>
-            <Link to={`/booking-form/${rentalCompanySlug}/${vehicleSlug}`}>Let's Book!</Link>
+            <Link
+              to={`/vehicle-detail/${rentalCompanySlug}/${vehicleSlug}/book`}
+            >
+              Let's Book!
+            </Link>
           </Button>
         </div>
       </div>

@@ -12,8 +12,9 @@ export default [
     route("signup", "./routes/signup.tsx"), // POST /auth/signup
     route("signout", "routes/signout.tsx"), // logout
     route("dashboard", "routes/dashboard.tsx"), //get/auth/me
+    route("dashboard/bookings", "routes/bookings.tsx"), // GET /bookings
     route(
-      "booking-form/:rentalCompanySlug/:vehicleSlug",
+      "vehicle-detail/:rentalCompanySlug/:vehicleSlug/book",
       "./routes/booking-form.tsx",
     ),
     route("result-search", "routes/result-search.tsx"),
