@@ -148,10 +148,10 @@ export default function RentalForm({ loaderData }: Route.ComponentProps) {
 
       {/* Vehicle Details Card */}
       <div>
-        <div className="bg-gradient-to-br from-gray-50 to-white p-4">
+        <div className="bg-linear-to-br from-gray-50 to-white p-4">
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 flex items-center gap-4">
-            <div className="flex-shrink-0">
-              <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center overflow-hidden">
+            <div className="shrink-0">
+              <div className="w-24 h-24 bg-linear-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center overflow-hidden">
                 <img
                   src={vehicle?.imageUrl || "/placeholder-vehicle.png"}
                   alt={vehicle?.name || "Vehicle"}
