@@ -1,7 +1,7 @@
 import { Outlet, redirect } from "react-router";
 import { BottomNav } from "../components/bottom-nav";
 import type { Route } from "./+types/layout-main";
-import { getSession, destroySession } from "~/sessions";
+import { getSession, destroySession } from "../sessions";
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const token = session.get("token");
@@ -14,7 +14,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   if (!response.ok && token) {
     return redirect("/", {

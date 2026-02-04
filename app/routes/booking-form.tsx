@@ -10,7 +10,7 @@ import {
   Form,
 } from "react-router";
 import { getSession } from "../sessions";
-import { VehicleRentalPicker } from "~/components/vehicle-rental-picker";
+import { VehicleRentalPicker } from "../components/vehicle-rental-picker";
 import type { UserAuthMe } from "../modules/user";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "~/components/ui/button";

@@ -198,6 +198,9 @@ export const signupValidation = () => {
       confirmPassword: z
         .string()
         .min(8, "Confirm password must be at least 8 characters"),
+      phoneNumber: z
+        .string()
+        .min(14, "Phone number must be at least 14 characters"),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Confirmation password is incorrect",
@@ -221,11 +224,11 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
     };
   }
 
-
   const registerBody = {
     fullName: parsed.data.fullName,
     email: parsed.data.email,
     password: parsed.data.password,
+    phoneNumber: parsed.data.phoneNumber,
   };
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_API_URL}/auth/signup`,
@@ -233,7 +236,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(registerBody),
-    }
+    },
   );
 
   const result = await response.json();
@@ -303,6 +306,16 @@ export default function SignupRoute() {
               {errors.email?._errors && (
                 <p className="text-red-500 text-sm">
                   {errors.email._errors[0]}
+                </p>
+              )}
+            </div>
+            {/* PHONE NUMBER */}
+            <div className="space-y-1">
+              <Label>Phone Number</Label>
+              <Input name="phoneNumber" placeholder="+62 812-3456-7890" />
+              {errors.phoneNumber?._errors && (
+                <p className="text-red-500 text-sm">
+                  {errors.phoneNumber._errors[0]}
                 </p>
               )}
             </div>

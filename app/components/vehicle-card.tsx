@@ -1,5 +1,5 @@
 import type { Vehicle } from "~/lib/vehicles/schema";
-import { formatRupiah } from "~/lib/utils/format-rupiah";
+import { formatRupiah } from "../lib/utils/format-rupiah";
 import { Button } from "./ui/button";
 import { Link } from "react-router";
 interface VehicleCardProps {

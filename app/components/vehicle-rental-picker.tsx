@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
 import { ChevronDownIcon } from "lucide-react";
 
-import { Button } from "~/components/ui/button";
-import { Calendar } from "~/components/ui/calendar";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+import { Button } from "../components/ui/button";
+import { Calendar } from "../components/ui/calendar";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "~/components/ui/popover";
+} from "../components/ui/popover";
 
 interface VehicleRentalPickerProps {
   onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
 }
 
-export function VehicleRentalPicker({ onDateChange }: VehicleRentalPickerProps) {
+export function VehicleRentalPicker({
+  onDateChange,
+}: VehicleRentalPickerProps) {
   const [openFrom, setOpenFrom] = useState(false);
   const [openTo, setOpenTo] = useState(false);
   const [dateFrom, setDateFrom] = useState<Date | undefined>(new Date());
