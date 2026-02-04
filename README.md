@@ -62,3 +62,37 @@ flowchart TD
     E --> F[Book Vehicle]
     F --> G[End: Confirmation]
 ```
+
+## Getting Started
+
+### Installation
+
+Copy and edit `.env` file:
+
+```sh
+cp .env.example .env
+```
+
+Install the dependencies:
+
+```bash
+bun install
+```
+
+### Development
+
+Start the development server with HMR:
+
+```bash
+bun run dev
+```
+
+Your application will be available at `http://localhost:5173`.
+
+## Building for Production
+
+Create a production build:
+
+```bash
+bun run build
+```
