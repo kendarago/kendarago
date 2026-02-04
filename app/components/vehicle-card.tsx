@@ -6,6 +6,13 @@ interface VehicleCardProps {
   vehicle: Vehicle;
 }
 
+function formatSlug(slug: string): string {
+  return slug
+    .split("-")
+    .map((w) => (w.toUpperCase() === w ? w : w[0].toUpperCase() + w.slice(1)))
+    .join(" ");
+}
+
 export function VehicleCard({ vehicle }: VehicleCardProps) {
   return (
     <Link
@@ -21,7 +28,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
       </div>
       <div className="p-4">
         <div className="flex items-center gap-1 text-sm text-muted-foreground mb-1">
-          <span>{vehicle.rentalCompanySlug}</span>
+          <span>{vehicle.rentalCompany.name}</span>
         </div>
         <h3 className="font-semibold text-foreground">{vehicle.name}</h3>
         <p className="text-lg font-bold text-primary mt-2">

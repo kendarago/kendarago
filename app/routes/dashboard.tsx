@@ -2,7 +2,7 @@ import { getSession } from "../sessions";
 import type { Route } from "./+types/dashboard";
 import type { UserAuthMe } from "../modules/user";
 import { Card, CardContent } from "../components/ui/card";
-import { redirect, Form } from "react-router";
+import { redirect, Form, Link } from "react-router";
 import { User, ChevronRight, LogOut, Bell } from "lucide-react";
 
 export function meta({}: Route.MetaArgs) {
@@ -63,19 +63,22 @@ export default function DashboardRoute({ loaderData }: Route.ComponentProps) {
         </Card>
 
         {/* Booking History Card */}
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-start gap-4">
-              <div className="text-4xl">🧍</div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-lg mb-1">Booking History</h3>
-                <p className="text-sm text-slate-600">
-                  It's easy to start hosting and earn extra income.
-                </p>
+        <Link to="/dashboard/bookings" className="block">
+          <Card className="hover:bg-slate-50 transition-colors cursor-pointer">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="text-4xl">🧍</div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-1">Booking History</h3>
+                  <p className="text-sm text-slate-600">
+                    It's easy to start hosting and earn extra income.
+                  </p>
+                </div>
+                <ChevronRight className="h-5 w-5 text-slate-400 self-center" />
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Link>
 
         {/* Menu Items */}
         <Card>
