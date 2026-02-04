@@ -4,7 +4,7 @@
 
 **Kendarago** is a vehicle rental platform that helps users search for available vehicles, rent vehicles, and enjoy their trips with ease. Whether you need a car for a family trip, a bike for a solo ride, or any other vehicle, Kendarago ensures a hassle-free experience with ease.
 
-🔍 Why Kendarago?
+🔍 **Why Kendarago**?
 
 Traditional rental processes are often frustrating. Kendarago was built to solve specific user pain points by eliminating inaccurate location and contact information, offering clear availability and transparent rental details, simplifying the comparison process, and minimizing the need for direct contact with providers
 
