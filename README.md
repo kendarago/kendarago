@@ -23,9 +23,9 @@ With Kendarago, users can find, filter, and view rental options instantly—maki
 | ------------------------------ | ----- | ----------------- | ----------------------------------------- | ---------- |
 | Rakhel Cakra Kusumadinata Sera | Cakra | @rakhelcakra      | [view](https://github.com/CakraSera)      | Full Stack |
 | Mochamad Irvan                 | Irvan | @xzrvan           | [view](https://github.com/mchmdirvan)     | Full Stack |
-| Sia Billal Quba                | Obby  | @siabillalquba    | [view](https://github.com/siabillalquba)  | Full Stack |
-| Muhammad Rizki Kurnia Putra    | Nanda | @muhammmadrizki20 | [view](https://github.com/muhammmadrizki) | Full Stack |
-| Galuh Wasesa                   | Nanda | @sesha22          | [view](https://github.com/sesha22)        | Frontend   |
+| Sia Billal Quba                | Bilal | @siabillalquba    | [view](https://github.com/siabillalquba)  | Full Stack |
+| Muhammad Rizki Kurnia Putra    | Rizki | @muhammmadrizki20 | [view](https://github.com/muhammmadrizki) | Full Stack |
+| Galuh Wasesa                   | Sesa  | @sesha22          | [view](https://github.com/sesha22)        | Frontend   |
 
 ## 🔗 Links
 
