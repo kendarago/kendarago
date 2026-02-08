@@ -188,7 +188,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 // VALIDATION WITH ZOD VALIDATION
-
 export const signupValidation = () => {
   return z
     .object({
@@ -267,12 +266,15 @@ export default function SignupRoute() {
       <Card className="w-full max-w-md border border-gray-200 shadow-md">
         <CardContent className="pt-8 pb-6 px-8">
           {/* Logo */}
-          <div className="flex justify-center mb-6">
-            <div className="h-10 w-10 bg-black rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-xl">K</span>
-            </div>
-          </div>
 
+          <div className="flex gap-2 justify-center mb-6">
+            <img
+              src="/images/kendarago_logo_v2.png"
+              alt="Kendarago Logo"
+              className="h-8 mb-2"
+            />
+            <h1 className="text-2xl font-bold text-foreground">Kendarago</h1>
+          </div>
           <h2 className="text-2xl font-semibold text-center mb-1">
             Create your account
           </h2>

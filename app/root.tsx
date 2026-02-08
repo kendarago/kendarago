@@ -25,14 +25,14 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "icon",
-    href: "/images/kendarago_bulat.png",
+    href: "/images/kendarago_logo_v2.png",
   },
 ];
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const token = session.get("token");
-  
+
   return {
     isAuthenticated: !!token,
   };
