@@ -22,7 +22,8 @@ export async function loader({ params }: Route.LoaderArgs) {
       `/rental-companies/${rentalCompanySlug}/vehicles/${vehicleSlug}`,
   );
 
-  const vehicleData = (await response.json()).data;
+  const vehicleData = await response.json();
+  console.log({ vehicleData });
   return vehicleData;
 }
 export default function VehicleDetail({ loaderData }: Route.ComponentProps) {

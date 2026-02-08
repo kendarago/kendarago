@@ -68,7 +68,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   if (!vehicleResponse.ok) {
     throw new Response("Vehicle not found", { status: 404 });
   }
-  const vehicleData = (await vehicleResponse.json()).data;
+  const vehicleData = await vehicleResponse.json();
   console.log({ vehicleData });
 
   return { user, vehicle: vehicleData as Vehicle };
