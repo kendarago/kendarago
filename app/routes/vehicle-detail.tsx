@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, useParams } from "react-router";
 import type { Route } from "./+types/vehicle-detail";
 import {
   ArrowLeft,
@@ -23,11 +23,11 @@ export async function loader({ params }: Route.LoaderArgs) {
   );
 
   const vehicleData = await response.json();
-  console.log({ vehicleData });
   return vehicleData;
 }
 export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
   const vehicle = loaderData;
+  const { rentalCompanySlug, vehicleSlug } = useParams();
   const [termsExpanded, setTermsExpanded] = useState(false);
   const [addonsExpanded, setAddonsExpanded] = useState(false);
 
@@ -300,7 +300,7 @@ export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
             <p className="text-xl font-bold">IDR 150,000/day</p>
           </div>
           <Button size="lg" className="px-8" asChild>
-            <Link to="/booking-form">Let's Book!</Link>
+            <Link to={`/vehicle-detail/${rentalCompanySlug}/${vehicleSlug}/book`}>Let's Book!</Link>
           </Button>
         </div>
       </div>
