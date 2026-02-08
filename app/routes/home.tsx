@@ -7,7 +7,7 @@ import type { Vehicle } from "../lib/vehicles/schema";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
+    { title: "Kendarago - Home" },
     { name: "description", content: "Welcome to React Router!" },
   ];
 }
@@ -32,11 +32,19 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header */}
       <header className="px-4 pt-6 pb-2">
-        <h1 className="text-xl font-bold text-foreground">
-          Vehicle Rentals Near You
-        </h1>
+        <div className="flex gap-2">
+          <img
+            src="/images/kendarago_logo_v2.png"
+            alt="Kendarago Logo"
+            className="h-8 mb-2"
+          />
+          <h1 className="text-xl font-bold text-foreground">Kendarago</h1>
+        </div>
         <div className="flex items-center gap-1 mt-1 text-muted-foreground">
-          <span className="text-sm">Find You Vehicles</span>
+          <h2 className="font-semibold">
+            Search, Rent, and
+            <span className="text-primary"> Go!</span>
+          </h2>
         </div>
       </header>
       <div className="flex flex-col pb-4">
@@ -89,10 +97,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </div>
         ) : (
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              {vehicles.length} available{" "}
-              {vehicles.length === 1 ? "vehicle" : "vehicles"} within 15 km
-            </p>
             {vehicles.map((vehicle: Vehicle) => (
               <VehicleCard
                 key={vehicle.id}

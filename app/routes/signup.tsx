@@ -188,7 +188,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 // VALIDATION WITH ZOD VALIDATION
-
 export const signupValidation = () => {
   return z
     .object({
@@ -198,6 +197,9 @@ export const signupValidation = () => {
       confirmPassword: z
         .string()
         .min(8, "Confirm password must be at least 8 characters"),
+      phoneNumber: z
+        .string()
+        .min(14, "Phone number must be at least 14 characters"),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Confirmation password is incorrect",
@@ -221,11 +223,11 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
     };
   }
 
-
   const registerBody = {
     fullName: parsed.data.fullName,
     email: parsed.data.email,
     password: parsed.data.password,
+    phoneNumber: parsed.data.phoneNumber,
   };
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_API_URL}/auth/signup`,
@@ -233,7 +235,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(registerBody),
-    }
+    },
   );
 
   const result = await response.json();
@@ -264,12 +266,15 @@ export default function SignupRoute() {
       <Card className="w-full max-w-md border border-gray-200 shadow-md">
         <CardContent className="pt-8 pb-6 px-8">
           {/* Logo */}
-          <div className="flex justify-center mb-6">
-            <div className="h-10 w-10 bg-black rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-xl">K</span>
-            </div>
-          </div>
 
+          <div className="flex gap-2 justify-center mb-6">
+            <img
+              src="/images/kendarago_logo_v2.png"
+              alt="Kendarago Logo"
+              className="h-8 mb-2"
+            />
+            <h1 className="text-2xl font-bold text-foreground">Kendarago</h1>
+          </div>
           <h2 className="text-2xl font-semibold text-center mb-1">
             Create your account
           </h2>
@@ -303,6 +308,16 @@ export default function SignupRoute() {
               {errors.email?._errors && (
                 <p className="text-red-500 text-sm">
                   {errors.email._errors[0]}
+                </p>
+              )}
+            </div>
+            {/* PHONE NUMBER */}
+            <div className="space-y-1">
+              <Label>Phone Number</Label>
+              <Input name="phoneNumber" placeholder="+62 812-3456-7890" />
+              {errors.phoneNumber?._errors && (
+                <p className="text-red-500 text-sm">
+                  {errors.phoneNumber._errors[0]}
                 </p>
               )}
             </div>

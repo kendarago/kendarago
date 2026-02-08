@@ -74,6 +74,15 @@ export default function SignInRoute({ actionData }: Route.ComponentProps) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 space-y-8 transition-all duration-300 hover:shadow-2xl">
+        {/* Logo */}
+        <div className="flex gap-2 justify-center mb-6">
+          <img
+            src="/images/kendarago_logo_v2.png"
+            alt="Kendarago Logo"
+            className="h-8 mb-2"
+          />
+          <h1 className="text-2xl font-bold text-foreground">Kendarago</h1>
+        </div>
         {/* Title */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-extrabold text-gray-900">

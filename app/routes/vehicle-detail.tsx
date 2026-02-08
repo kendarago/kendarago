@@ -23,10 +23,10 @@ export async function loader({ params }: Route.LoaderArgs) {
   );
 
   const vehicleData = (await response.json()).data;
-  return { vehicle: vehicleData, rentalCompanySlug, vehicleSlug };
+  return vehicleData;
 }
 export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
-  const { vehicle, rentalCompanySlug, vehicleSlug } = loaderData;
+  const vehicle = loaderData;
   const [termsExpanded, setTermsExpanded] = useState(false);
   const [addonsExpanded, setAddonsExpanded] = useState(false);
 
@@ -299,11 +299,7 @@ export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
             <p className="text-xl font-bold">IDR 150,000/day</p>
           </div>
           <Button size="lg" className="px-8" asChild>
-            <Link
-              to={`/vehicle-detail/${rentalCompanySlug}/${vehicleSlug}/book`}
-            >
-              Let's Book!
-            </Link>
+            <Link to="/booking-form">Let's Book!</Link>
           </Button>
         </div>
       </div>
