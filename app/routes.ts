@@ -8,11 +8,11 @@ import {
 export default [
   layout("layouts/layout-main.tsx", [
     index("routes/home.tsx"),
-    route("signin", "routes/signin.tsx"), //post /auth/signin
-    route("signup", "./routes/signup.tsx"), // POST /auth/signup
-    route("signout", "routes/signout.tsx"), // logout
-    route("dashboard", "routes/dashboard.tsx"), //get/auth/me
-    route("dashboard/bookings", "routes/bookings.tsx"), // GET /bookings
+    route("signin", "routes/signin.tsx"),
+    route("signup", "./routes/signup.tsx"),
+    route("signout", "routes/signout.tsx"),
+    route("dashboard", "routes/dashboard.tsx"),
+    route("dashboard/bookings", "routes/bookings.tsx"),
     route(
       "vehicle-detail/:rentalCompanySlug/:vehicleSlug/book",
       "./routes/booking-form.tsx",
