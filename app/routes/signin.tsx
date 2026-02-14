@@ -48,7 +48,6 @@ export async function action({ request }: Route.ActionArgs) {
 
     if (response.status !== 200) {
       const error = await response.json();
-      console.log("Signin error:", error);
       return { error: error.message || "Signin failed" };
     }
 

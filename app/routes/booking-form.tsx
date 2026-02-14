@@ -81,8 +81,6 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const payload = Object.fromEntries(formData);
 
-  console.log({ payload });
-
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_API_URL}/bookings`,
     {
@@ -94,7 +92,6 @@ export async function action({ request }: Route.ActionArgs) {
       body: JSON.stringify(payload),
     },
   );
-  console.log({ response });
   if (!response.ok) {
     const errorData = await response.json();
     return { error: errorData.message || "Failed to create booking" };

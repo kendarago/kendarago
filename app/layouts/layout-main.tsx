@@ -5,7 +5,6 @@ import { getSession, destroySession } from "../sessions";
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const token = session.get("token");
-  console.log("Layout Main Loader - Token:", token);
 
   const response = await fetch(
     import.meta.env.VITE_BACKEND_API_URL + "/auth/me",

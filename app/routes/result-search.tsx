@@ -29,7 +29,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const queryString = new URLSearchParams(params).toString();
   try {
     const response = await fetch(
-      import.meta.env.VITE_BACKEND_API_URL + "/vehicles?" + queryString
+      import.meta.env.VITE_BACKEND_API_URL + "/vehicles?" + queryString,
     );
 
     const vehicles = await response.json();
@@ -125,7 +125,6 @@ export default function ResultSearch({ loaderData }: Route.ComponentProps) {
   //   return diff;
   // }, [params]);
   //
-  console.log("length vehicles", vehicles);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">

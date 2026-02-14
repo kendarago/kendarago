@@ -14,7 +14,6 @@ function formatSlug(slug: string): string {
 }
 
 export function VehicleCard({ vehicle }: VehicleCardProps) {
-  console.log(vehicle);
   return (
     <Link
       to={`/vehicle-detail/${vehicle.rentalCompany.slug}/${vehicle.slug}`}
