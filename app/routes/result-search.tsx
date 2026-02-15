@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import type { Route } from "./+types/result-search";
 
 type ApiParams = {
-  location: string;
+  city: string;
   startDate: string;
   endDate: string;
   category: string;
@@ -17,7 +17,7 @@ type ApiParams = {
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const params = {
-    location: url.searchParams.get("location") || "",
+    city: url.searchParams.get("city") || "",
     startDate: url.searchParams.get("startDate") || "",
     endDate: url.searchParams.get("endDate") || "",
     available:
@@ -105,8 +105,7 @@ export default function ResultSearch({ loaderData }: Route.ComponentProps) {
   // ].filter(Boolean).length;
 
   // Build header display
-  const locationName = "Anywhere";
-  // const locationName = currentLocation?.name || "Anywhere";
+  const locationName = params?.city || "All Cities";
   const dateDisplay =
     params?.startDate && params?.endDate
       ? `${format(params?.startDate, "MMM d")} – ${format(params?.endDate, "MMM d")}`
