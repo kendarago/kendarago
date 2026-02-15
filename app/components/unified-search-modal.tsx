@@ -1,32 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, createSearchParams } from "react-router";
 import { Input } from "../components/ui/input";
-import type { Location, Vehicle, VehicleCategory } from "~/lib/types";
+import type { VehicleCategory } from "~/lib/types";
 import {
   XIcon,
-  NavigationIcon,
-  GlobeIcon,
-  HistoryIcon,
-  PlaneIcon,
-  BuildingIcon,
-  TrainIcon,
-  HotelIcon,
   SearchIcon,
   CalendarIcon,
   Motorbike,
   CarIcon,
   ChevronLeftIcon,
   CheckIcon,
+  BuildingIcon,
+  MapPinIcon,
 } from "lucide-react";
 import { format, addDays, isBefore, startOfDay } from "date-fns";
 import { useRentVehicles } from "../context/rent-vehicles-context";
-
-// Location history type
-interface LocationHistory {
-  location: Location;
-  dates?: string;
-  timestamp: number;
-}
 
 // Date range type
 interface DateRange {
@@ -39,39 +27,6 @@ interface UnifiedSearchModalProps {
   onClose: () => void;
 }
 
-// Predefined location suggestions
-const airports = [
-  {
-    name: "DPS - Ngurah Rai International Airport",
-    lat: -8.7467,
-    lng: 115.1667,
-  },
-  { name: "SUB - Juanda International Airport", lat: -7.3797, lng: 112.7876 },
-  {
-    name: "CGK - Soekarno-Hatta International Airport",
-    lat: -6.1256,
-    lng: 106.6558,
-  },
-];
-
-const cities = [
-  { name: "Seminyak, Bali", lat: -8.6909, lng: 115.1639 },
-  { name: "Ubud, Bali", lat: -8.5069, lng: 115.2624 },
-  { name: "Kuta, Bali", lat: -8.718, lng: 115.1686 },
-  { name: "Canggu, Bali", lat: -8.6478, lng: 115.1385 },
-  { name: "Sanur, Bali", lat: -8.6783, lng: 115.2631 },
-];
-
-const trainStations = [
-  { name: "Surabaya Gubeng Station", lat: -7.2653, lng: 112.7519 },
-  { name: "Yogyakarta Station", lat: -7.7891, lng: 110.3634 },
-];
-
-const hotels = [
-  { name: "W Bali - Seminyak", lat: -8.6853, lng: 115.1562 },
-  { name: "The Mulia, Nusa Dua", lat: -8.8183, lng: 115.2278 },
-];
-
 type TabType = "location" | "dates" | "vehicle";
 
 export function UnifiedSearchModal({
@@ -81,16 +36,16 @@ export function UnifiedSearchModal({
   const navigate = useNavigate();
 
   const { setIsModalOpen } = useRentVehicles();
-  // Local state - replacing Zustand store
+  // Local state
   const [activeTab, setActiveTab] = useState<TabType>("location");
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoadingGPS, setIsLoadingGPS] = useState(false);
   const [selectingEnd, setSelectingEnd] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Core state variables (previously from Zustand)
-  const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
-  const [locationHistory, setLocationHistory] = useState<LocationHistory[]>([]);
+  // City-based location state (fetched from API)
+  const [cities, setCities] = useState<string[]>([]);
+  const [isLoadingCities, setIsLoadingCities] = useState(false);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [rentalDateRange, setRentalDateRange] = useState<DateRange>({
     startDate: null,
     endDate: null,
@@ -100,30 +55,23 @@ export function UnifiedSearchModal({
 
   const today = startOfDay(new Date());
 
-  // Load data from localStorage on mount
+  // Fetch cities from API on mount
   useEffect(() => {
     if (isOpen) {
       setIsModalOpen(isOpen);
-      const savedHistory = localStorage.getItem("riderent-location-history");
-      if (savedHistory) {
-        try {
-          setLocationHistory(JSON.parse(savedHistory));
-        } catch (e) {
-          console.error("Failed to parse location history", e);
-        }
-      }
+      setIsLoadingCities(true);
+      fetch(import.meta.env.VITE_BACKEND_API_URL + "/rental-companies/cities")
+        .then((res) => res.json())
+        .then((data: string[]) => {
+          setCities(data);
+          setIsLoadingCities(false);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch cities", err);
+          setIsLoadingCities(false);
+        });
     }
   }, [isOpen]);
-
-  // Save location history to localStorage
-  useEffect(() => {
-    if (locationHistory.length > 0) {
-      localStorage.setItem(
-        "riderent-location-history",
-        JSON.stringify(locationHistory),
-      );
-    }
-  }, [locationHistory]);
 
   useEffect(() => {
     if (isOpen) {
@@ -136,57 +84,11 @@ export function UnifiedSearchModal({
     };
   }, [isOpen]);
 
-  // Add location to history
-  const addLocationToHistory = useCallback(
-    (location: Location, dates?: string) => {
-      setLocationHistory((prev) => {
-        const filtered = prev.filter((h) => h.location.name !== location.name);
-        return [{ location, dates, timestamp: Date.now() }, ...filtered].slice(
-          0,
-          5,
-        );
-      });
-    },
-    [],
-  );
-
-  // Location handlers
-  const handleSelectLocation = useCallback(
-    (location: Location) => {
-      addLocationToHistory(location);
-      setCurrentLocation(location);
-      setActiveTab("dates");
-    },
-    [addLocationToHistory],
-  );
-
-  const handleCurrentLocation = useCallback(() => {
-    setIsLoadingGPS(true);
-    if (!navigator.geolocation) {
-      setIsLoadingGPS(false);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const location = {
-          name: "Current Location",
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        handleSelectLocation(location);
-        setIsLoadingGPS(false);
-      },
-      () => {
-        setIsLoadingGPS(false);
-      },
-      { timeout: 10000, enableHighAccuracy: true },
-    );
-  }, [handleSelectLocation]);
-
-  const handleAnywhere = useCallback(() => {
-    handleSelectLocation({ name: "Anywhere", lat: 0, lng: 0 });
-  }, [handleSelectLocation]);
+  // City selection handler
+  const handleSelectCity = useCallback((city: string) => {
+    setSelectedCity(city);
+    setActiveTab("dates");
+  }, []);
 
   // Date handlers
   const handleDateClick = (date: Date) => {
@@ -220,22 +122,12 @@ export function UnifiedSearchModal({
     setActiveTab("vehicle");
   };
 
-  // Filter locations
-  const filterLocations = (locations: typeof airports) =>
-    locations.filter((loc) =>
-      loc.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+  // Filter cities by search query
+  const filteredCities = cities.filter((city) =>
+    city.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
-  const filteredAirports = filterLocations(airports);
-  const filteredCities = filterLocations(cities);
-  const filteredTrainStations = filterLocations(trainStations);
-  const filteredHotels = filterLocations(hotels);
-
-  const hasResults =
-    filteredAirports.length > 0 ||
-    filteredCities.length > 0 ||
-    filteredTrainStations.length > 0 ||
-    filteredHotels.length > 0;
+  const hasResults = filteredCities.length > 0;
 
   // Calendar helpers
   const getDaysInMonth = (date: Date) => {
@@ -290,33 +182,20 @@ export function UnifiedSearchModal({
 
   // Check if search is ready
   const canSearch =
-    currentLocation && rentalDateRange.startDate && rentalDateRange.endDate;
+    selectedCity !== null &&
+    rentalDateRange.startDate &&
+    rentalDateRange.endDate;
 
   const handleSearch = () => {
     if (canSearch) {
-      // Save search data to localStorage for results page
-      localStorage.setItem(
-        "riderent-search-data",
-        JSON.stringify({
-          location: currentLocation,
-          dateRange: {
-            startDate: rentalDateRange.startDate?.toISOString(),
-            endDate: rentalDateRange.endDate?.toISOString(),
-          },
-          category: selectedCategory,
-        }),
-      );
-
-
       if (!rentalDateRange.startDate || !rentalDateRange.endDate) {
-        // Show error message or prevent form submission
         alert("Please select both start and end dates.");
         return;
       }
       const searchParams = createSearchParams({
-        location: currentLocation.name,
-        startDate: rentalDateRange.startDate?.toISOString(),
-        endDate: rentalDateRange.endDate?.toISOString(),
+        city: selectedCity || "", // Ensure empty string if null, though check ensures not null
+        startDate: rentalDateRange.startDate.toISOString(),
+        endDate: rentalDateRange.endDate.toISOString(),
         category: selectedCategory,
       });
       setIsModalOpen(false);
@@ -357,9 +236,9 @@ export function UnifiedSearchModal({
             }`}
           >
             <div className="flex flex-col items-center gap-1">
-              <NavigationIcon className="h-5 w-5" />
-              <span>Location</span>
-              {currentLocation && (
+              <MapPinIcon className="h-5 w-5" />
+              <span>City</span>
+              {selectedCity && (
                 <CheckIcon className="h-3 w-3 text-primary absolute top-2 right-4" />
               )}
             </div>
@@ -412,7 +291,7 @@ export function UnifiedSearchModal({
                   <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     type="text"
-                    placeholder="City, airport, address or hotel"
+                    placeholder="Search city..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10 h-11 bg-secondary/50 border-0"
@@ -421,8 +300,30 @@ export function UnifiedSearchModal({
                 </div>
               </div>
 
-              {/* Cities */}
-              {filteredCities.length > 0 && (
+              {/* All Cities option */}
+              <div className="border-b border-border">
+                <button
+                  onClick={() => handleSelectCity("")}
+                  className={`flex items-center gap-4 w-full px-4 py-3 hover:bg-secondary/50 transition-colors text-left ${
+                    selectedCity === "" ? "bg-primary/10" : ""
+                  }`}
+                >
+                  <div className="flex items-center justify-center w-10 h-10 bg-secondary rounded-full">
+                    <MapPinIcon className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                  <p className="font-medium text-foreground">All Cities</p>
+                  {selectedCity === "" && (
+                    <CheckIcon className="h-5 w-5 text-primary ml-auto" />
+                  )}
+                </button>
+              </div>
+
+              {/* Cities from API */}
+              {isLoadingCities ? (
+                <div className="flex items-center justify-center py-12">
+                  <p className="text-muted-foreground">Loading cities...</p>
+                </div>
+              ) : filteredCities.length > 0 ? (
                 <div className="border-b border-border">
                   <p className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wide">
                     Cities
@@ -430,93 +331,29 @@ export function UnifiedSearchModal({
                   {filteredCities.map((city, index) => (
                     <button
                       key={index}
-                      onClick={() => handleSelectLocation(city)}
-                      className="flex items-center gap-4 w-full px-4 py-3 hover:bg-secondary/50 transition-colors text-left"
+                      onClick={() => handleSelectCity(city)}
+                      className={`flex items-center gap-4 w-full px-4 py-3 hover:bg-secondary/50 transition-colors text-left ${
+                        selectedCity === city ? "bg-primary/10" : ""
+                      }`}
                     >
                       <div className="flex items-center justify-center w-10 h-10 bg-secondary rounded-full">
                         <BuildingIcon className="h-5 w-5 text-muted-foreground" />
                       </div>
-                      <p className="font-medium text-foreground">{city.name}</p>
+                      <p className="font-medium text-foreground">{city}</p>
+                      {selectedCity === city && (
+                        <CheckIcon className="h-5 w-5 text-primary ml-auto" />
+                      )}
                     </button>
                   ))}
                 </div>
-              )}
-
-              {/* Airports */}
-              {filteredAirports.length > 0 && (
-                <div className="border-b border-border">
-                  <p className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                    Airports
-                  </p>
-                  {filteredAirports.map((airport, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleSelectLocation(airport)}
-                      className="flex items-center gap-4 w-full px-4 py-3 hover:bg-secondary/50 transition-colors text-left"
-                    >
-                      <div className="flex items-center justify-center w-10 h-10 bg-secondary rounded-full">
-                        <PlaneIcon className="h-5 w-5 text-muted-foreground" />
-                      </div>
-                      <p className="font-medium text-foreground truncate">
-                        {airport.name}
-                      </p>
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Train Stations */}
-              {filteredTrainStations.length > 0 && (
-                <div className="border-b border-border">
-                  <p className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                    Train stations
-                  </p>
-                  {filteredTrainStations.map((station, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleSelectLocation(station)}
-                      className="flex items-center gap-4 w-full px-4 py-3 hover:bg-secondary/50 transition-colors text-left"
-                    >
-                      <div className="flex items-center justify-center w-10 h-10 bg-secondary rounded-full">
-                        <TrainIcon className="h-5 w-5 text-muted-foreground" />
-                      </div>
-                      <p className="font-medium text-foreground">
-                        {station.name}
-                      </p>
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Hotels */}
-              {filteredHotels.length > 0 && (
-                <div className="border-b border-border">
-                  <p className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                    Hotels
-                  </p>
-                  {filteredHotels.map((hotel, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleSelectLocation(hotel)}
-                      className="flex items-center gap-4 w-full px-4 py-3 hover:bg-secondary/50 transition-colors text-left"
-                    >
-                      <div className="flex items-center justify-center w-10 h-10 bg-secondary rounded-full">
-                        <HotelIcon className="h-5 w-5 text-muted-foreground" />
-                      </div>
-                      <p className="font-medium text-foreground">
-                        {hotel.name}
-                      </p>
-                    </button>
-                  ))}
-                </div>
-              )}
+              ) : null}
 
               {/* No Results */}
               {searchQuery && !hasResults && (
                 <div className="flex flex-col items-center justify-center py-12 px-4">
                   <SearchIcon className="h-12 w-12 text-muted-foreground/50 mb-4" />
                   <p className="text-foreground font-medium mb-1">
-                    No locations found
+                    No cities found
                   </p>
                   <p className="text-sm text-muted-foreground text-center">
                     Try a different search term
