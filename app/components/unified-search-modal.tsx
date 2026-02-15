@@ -5,29 +5,20 @@ import type { VehicleCategory } from "~/lib/types";
 import {
   XIcon,
   SearchIcon,
-  CalendarIcon,
   Motorbike,
   CarIcon,
-  ChevronLeftIcon,
   CheckIcon,
   BuildingIcon,
   MapPinIcon,
 } from "lucide-react";
-import { format, addDays, isBefore, startOfDay } from "date-fns";
 import { useRentVehicles } from "../context/rent-vehicles-context";
-
-// Date range type
-interface DateRange {
-  startDate: Date | null;
-  endDate: Date | null;
-}
 
 interface UnifiedSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-type TabType = "location" | "dates" | "vehicle";
+type TabType = "location" | "vehicle";
 
 export function UnifiedSearchModal({
   isOpen,
@@ -39,21 +30,14 @@ export function UnifiedSearchModal({
   // Local state
   const [activeTab, setActiveTab] = useState<TabType>("location");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectingEnd, setSelectingEnd] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // City-based location state (fetched from API)
   const [cities, setCities] = useState<string[]>([]);
   const [isLoadingCities, setIsLoadingCities] = useState(false);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const [rentalDateRange, setRentalDateRange] = useState<DateRange>({
-    startDate: null,
-    endDate: null,
-  });
+
   const [selectedCategory, setSelectedCategory] =
     useState<VehicleCategory>("motorcycle");
-
-  const today = startOfDay(new Date());
 
   // Fetch cities from API on mount
   useEffect(() => {
@@ -87,40 +71,8 @@ export function UnifiedSearchModal({
   // City selection handler
   const handleSelectCity = useCallback((city: string) => {
     setSelectedCity(city);
-    setActiveTab("dates");
-  }, []);
-
-  // Date handlers
-  const handleDateClick = (date: Date) => {
-    if (isBefore(date, today)) return;
-
-    if (!selectingEnd) {
-      setRentalDateRange({ startDate: date, endDate: null });
-      setSelectingEnd(true);
-    } else {
-      if (
-        rentalDateRange.startDate &&
-        isBefore(date, rentalDateRange.startDate)
-      ) {
-        setRentalDateRange({ startDate: date, endDate: null });
-      } else {
-        setRentalDateRange({
-          startDate: rentalDateRange.startDate,
-          endDate: date,
-        });
-        setSelectingEnd(false);
-        setActiveTab("vehicle");
-      }
-    }
-  };
-
-  const handleQuickSelect = (days: number) => {
-    const start = today;
-    const end = addDays(today, days - 1);
-    setRentalDateRange({ startDate: start, endDate: end });
-    setSelectingEnd(false);
     setActiveTab("vehicle");
-  };
+  }, []);
 
   // Filter cities by search query
   const filteredCities = cities.filter((city) =>
@@ -129,73 +81,13 @@ export function UnifiedSearchModal({
 
   const hasResults = filteredCities.length > 0;
 
-  // Calendar helpers
-  const getDaysInMonth = (date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const days: (Date | null)[] = [];
-
-    for (let i = 0; i < firstDay.getDay(); i++) {
-      days.push(null);
-    }
-
-    for (let i = 1; i <= lastDay.getDate(); i++) {
-      days.push(new Date(year, month, i));
-    }
-
-    return days;
-  };
-
-  const isInRange = (date: Date) => {
-    if (!rentalDateRange.startDate || !rentalDateRange.endDate) return false;
-    return date >= rentalDateRange.startDate && date <= rentalDateRange.endDate;
-  };
-
-  const isSelected = (date: Date) => {
-    if (
-      rentalDateRange.startDate &&
-      date.toDateString() === rentalDateRange.startDate.toDateString()
-    )
-      return true;
-    if (
-      rentalDateRange.endDate &&
-      date.toDateString() === rentalDateRange.endDate.toDateString()
-    )
-      return true;
-    return false;
-  };
-
-  const getDayCount = () => {
-    if (!rentalDateRange.startDate || !rentalDateRange.endDate) return null;
-    const diff =
-      Math.ceil(
-        (rentalDateRange.endDate.getTime() -
-          rentalDateRange.startDate.getTime()) /
-          (1000 * 60 * 60 * 24),
-      ) + 1;
-    return diff;
-  };
-
-  const dayCount = getDayCount();
-
   // Check if search is ready
-  const canSearch =
-    selectedCity !== null &&
-    rentalDateRange.startDate &&
-    rentalDateRange.endDate;
+  const canSearch = selectedCity !== null && selectedCategory;
 
   const handleSearch = () => {
     if (canSearch) {
-      if (!rentalDateRange.startDate || !rentalDateRange.endDate) {
-        alert("Please select both start and end dates.");
-        return;
-      }
       const searchParams = createSearchParams({
         city: selectedCity || "", // Ensure empty string if null, though check ensures not null
-        startDate: rentalDateRange.startDate.toISOString(),
-        endDate: rentalDateRange.endDate.toISOString(),
         category: selectedCategory,
       });
       setIsModalOpen(false);
@@ -243,23 +135,6 @@ export function UnifiedSearchModal({
               )}
             </div>
             {activeTab === "location" && (
-              <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-primary rounded-full" />
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab("dates")}
-            className={`flex-1 py-3 text-sm font-medium transition-colors relative ${
-              activeTab === "dates" ? "text-primary" : "text-muted-foreground"
-            }`}
-          >
-            <div className="flex flex-col items-center gap-1">
-              <CalendarIcon className="h-5 w-5" />
-              <span>Dates</span>
-              {rentalDateRange.startDate && rentalDateRange.endDate && (
-                <CheckIcon className="h-3 w-3 text-primary absolute top-2 right-4" />
-              )}
-            </div>
-            {activeTab === "dates" && (
               <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-primary rounded-full" />
             )}
           </button>
@@ -360,156 +235,6 @@ export function UnifiedSearchModal({
                   </p>
                 </div>
               )}
-            </div>
-          )}
-
-          {/* Dates Tab */}
-          {activeTab === "dates" && (
-            <div>
-              {/* Selected Dates Display */}
-              <div className="px-4 py-4 border-b border-border">
-                <div className="flex gap-3">
-                  <div
-                    className={`flex-1 p-3 rounded-xl border-2 transition-colors ${
-                      !selectingEnd
-                        ? "border-primary bg-primary/5"
-                        : "border-border"
-                    }`}
-                  >
-                    <p className="text-xs text-muted-foreground mb-1">
-                      Start date
-                    </p>
-                    <p className="font-medium text-foreground">
-                      {rentalDateRange.startDate
-                        ? format(rentalDateRange.startDate, "MMM d, yyyy")
-                        : "Select date"}
-                    </p>
-                  </div>
-                  <div
-                    className={`flex-1 p-3 rounded-xl border-2 transition-colors ${
-                      selectingEnd
-                        ? "border-primary bg-primary/5"
-                        : "border-border"
-                    }`}
-                  >
-                    <p className="text-xs text-muted-foreground mb-1">
-                      End date
-                    </p>
-                    <p className="font-medium text-foreground">
-                      {rentalDateRange.endDate
-                        ? format(rentalDateRange.endDate, "MMM d, yyyy")
-                        : "Select date"}
-                    </p>
-                  </div>
-                </div>
-                {dayCount && (
-                  <p className="text-sm text-primary font-medium mt-3 text-center">
-                    {dayCount} days rental
-                  </p>
-                )}
-              </div>
-
-              {/* Quick Select */}
-              <div className="px-4 py-4 border-b border-border">
-                <p className="text-xs text-muted-foreground mb-3">
-                  Quick select
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    { label: "Today", days: 1 },
-                    { label: "3 days", days: 3 },
-                    { label: "1 week", days: 7 },
-                    { label: "2 weeks", days: 14 },
-                  ].map((option) => (
-                    <button
-                      key={option.label}
-                      onClick={() => handleQuickSelect(option.days)}
-                      className="px-4 py-2 rounded-full border border-border hover:border-primary hover:bg-primary/5 text-sm font-medium text-foreground transition-colors"
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Month Navigation */}
-              <div className="flex items-center justify-between px-4 py-3">
-                <button
-                  onClick={() =>
-                    setCurrentMonth(
-                      new Date(
-                        currentMonth.getFullYear(),
-                        currentMonth.getMonth() - 1,
-                      ),
-                    )
-                  }
-                  className="p-2 hover:bg-secondary rounded-full transition-colors"
-                >
-                  <ChevronLeftIcon className="h-5 w-5" />
-                </button>
-                <h3 className="font-semibold text-foreground">
-                  {format(currentMonth, "MMMM yyyy")}
-                </h3>
-                <button
-                  onClick={() =>
-                    setCurrentMonth(
-                      new Date(
-                        currentMonth.getFullYear(),
-                        currentMonth.getMonth() + 1,
-                      ),
-                    )
-                  }
-                  className="p-2 hover: bg-secondary rounded-full transition-colors rotate-180"
-                >
-                  <ChevronLeftIcon className="h-5 w-5" />
-                </button>
-              </div>
-
-              {/* Calendar */}
-              <div className="px-4 pb-4">
-                <div className="grid grid-cols-7 gap-1 mb-2">
-                  {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-                    <div
-                      key={day}
-                      className="h-10 flex items-center justify-center"
-                    >
-                      <span className="text-xs font-medium text-muted-foreground">
-                        {day}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <div className="grid grid-cols-7 gap-1">
-                  {getDaysInMonth(currentMonth).map((date, index) => {
-                    if (!date) {
-                      return <div key={`empty-${index}`} className="h-10" />;
-                    }
-
-                    const isPast = isBefore(date, today);
-                    const selected = isSelected(date);
-                    const inRange = isInRange(date);
-
-                    return (
-                      <button
-                        key={date.toISOString()}
-                        onClick={() => handleDateClick(date)}
-                        disabled={isPast}
-                        className={`h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                          isPast
-                            ? "text-muted-foreground/40 cursor-not-allowed"
-                            : selected
-                              ? "bg-primary text-primary-foreground"
-                              : inRange
-                                ? "bg-primary/20 text-primary"
-                                : "text-foreground hover:bg-secondary"
-                        }`}
-                      >
-                        {date.getDate()}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
             </div>
           )}
 
