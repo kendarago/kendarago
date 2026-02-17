@@ -72,7 +72,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
   return { user, vehicle: vehicleData as Vehicle };
 }
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request, params }: Route.ActionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const token = session.get("token");
   if (!token) {
@@ -96,7 +96,12 @@ export async function action({ request }: Route.ActionArgs) {
     const errorData = await response.json();
     return { error: errorData.message || "Failed to create booking" };
   }
-  return redirect("/dashboard");
+
+  const booking = await response.json();
+  const { rentalCompanySlug, vehicleSlug } = params;
+  return redirect(
+    `/vehicles-detail/${rentalCompanySlug}/${vehicleSlug}/book-confirm/${booking.id}`,
+  );
 }
 export default function RentalForm({ loaderData }: Route.ComponentProps) {
   const { user, vehicle } = loaderData;
