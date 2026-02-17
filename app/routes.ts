@@ -14,6 +14,10 @@ export default [
     route("dashboard", "routes/dashboard.tsx"),
     route("dashboard/bookings", "routes/bookings.tsx"),
     route(
+      "vehicles-detail/:rentalCompanySlug/:vehicleSlug/book-confirm/:bookingId",
+      "routes/booking-confirmation.tsx",
+    ),
+    route(
       "vehicle-detail/:rentalCompanySlug/:vehicleSlug/book",
       "./routes/booking-form.tsx",
     ),
