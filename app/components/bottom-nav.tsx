@@ -62,6 +62,7 @@ export function BottomNav() {
     "/booking",
     "/confirmation",
     "/vehicle-detail",
+    "/vehicles-detail",
     "/results",
   ];
 
