@@ -18,6 +18,10 @@ export default [
       "routes/booking-confirmation.tsx",
     ),
     route(
+      "vehicles-detail/:rentalCompanySlug/:vehicleSlug/payment/:bookingId",
+      "routes/payment.tsx",
+    ),
+    route(
       "vehicle-detail/:rentalCompanySlug/:vehicleSlug/book",
       "./routes/booking-form.tsx",
     ),

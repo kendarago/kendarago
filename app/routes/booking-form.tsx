@@ -8,6 +8,7 @@ import {
   useLoaderData,
   useActionData,
   Form,
+  useNavigation,
 } from "react-router";
 import { getSession } from "../sessions";
 import { VehicleRentalPicker } from "../components/vehicle-rental-picker";
@@ -100,12 +101,14 @@ export async function action({ request, params }: Route.ActionArgs) {
   const booking = await response.json();
   const { rentalCompanySlug, vehicleSlug } = params;
   return redirect(
-    `/vehicles-detail/${rentalCompanySlug}/${vehicleSlug}/book-confirm/${booking.id}`,
+    `/vehicles-detail/${rentalCompanySlug}/${vehicleSlug}/payment/${booking.id}`,
   );
 }
 export default function RentalForm({ loaderData }: Route.ComponentProps) {
   const { user, vehicle } = loaderData;
   const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [fullName, setFullName] = useState("");
@@ -254,11 +257,18 @@ export default function RentalForm({ loaderData }: Route.ComponentProps) {
                 size="lg"
                 className="px-8 w-full"
                 type="submit"
-                disabled={!isFormValid}
+                disabled={!isFormValid || isSubmitting}
               >
-                {isFormValid
-                  ? "Confirmation & Pay"
-                  : "Please fill all fields correctly"}
+                {isSubmitting ? (
+                  <span className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Processing...
+                  </span>
+                ) : isFormValid ? (
+                  "Continue to Payment"
+                ) : (
+                  "Please fill all fields correctly"
+                )}
               </Button>
             </div>
           </div>
