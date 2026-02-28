@@ -3,6 +3,8 @@ export type UserAuthMe = {
   email: string;
   phonenumber: string | null;
   fullName: string;
+  role: "RENTER" | "PROVIDER";
+  rentalCompanyId: string | null;
   createdAt: string;
   updatedAt: string;
 };

@@ -55,7 +55,23 @@ export async function action({ request }: Route.ActionArgs) {
 
     session.set("token", token);
 
-    return redirect("/dashboard", {
+    // Fetch user profile to check role
+    const meResponse = await fetch(
+      `${import.meta.env.VITE_BACKEND_API_URL}/auth/me`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    let redirectUrl = "/dashboard";
+    if (meResponse.ok) {
+      const user = await meResponse.json();
+      if (user.role === "PROVIDER") {
+        redirectUrl = "/rental/bookings";
+      }
+    }
+
+    return redirect(redirectUrl, {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
