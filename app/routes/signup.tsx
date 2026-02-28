@@ -358,6 +358,12 @@ export default function SignupRoute() {
               Sign in
             </a>
           </p>
+          <p className="text-center text-sm text-gray-600 mt-2">
+            Want to list your vehicles?{" "}
+            <a href="/signup/provider" className="text-black hover:underline">
+              Sign up as a Provider
+            </a>
+          </p>
         </CardContent>
       </Card>
     </div>

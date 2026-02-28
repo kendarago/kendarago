@@ -10,6 +10,7 @@ export default [
     index("routes/home.tsx"),
     route("signin", "routes/signin.tsx"),
     route("signup", "./routes/signup.tsx"),
+    route("signup/provider", "routes/signup-provider.tsx"),
     route("signout", "routes/signout.tsx"),
     route("dashboard", "routes/dashboard.tsx"),
     route("dashboard/bookings", "routes/bookings.tsx"),
@@ -30,5 +31,12 @@ export default [
       "vehicle-detail/:rentalCompanySlug/:vehicleSlug",
       "routes/vehicle-detail.tsx",
     ),
+  ]),
+
+  // Provider / Rental Company Routes
+  layout("layouts/layout-rental.tsx", [
+    route("rental/bookings", "routes/rental-bookings.tsx"),
+    route("rental/vehicles", "routes/rental-vehicles.tsx"),
+    route("rental/profile", "routes/rental-profile.tsx"),
   ]),
 ] satisfies RouteConfig;

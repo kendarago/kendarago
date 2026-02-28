@@ -56,7 +56,7 @@ export default function DashboardRoute({ loaderData }: Route.ComponentProps) {
               {/* Name */}
               <div>
                 <h2 className="text-2xl font-bold">{user.fullName}</h2>
-                <p className="text-slate-600">Guest</p>
+                <p className="text-slate-600 capitalize">{user.role.toLowerCase()}</p>
               </div>
             </div>
           </CardContent>
