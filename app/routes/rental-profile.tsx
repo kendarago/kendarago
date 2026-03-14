@@ -1,14 +1,111 @@
 import type { Route } from "./+types/rental-profile";
+import { getSession } from "../sessions";
+import type { UserAuthMe } from "../modules/user";
+import { Card, CardContent } from "../components/ui/card";
+import { redirect, Form, Link } from "react-router";
+import { User, ChevronRight, LogOut, Bell, Building2 } from "lucide-react";
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: "Rental Company Profile" }];
+  return [{ title: "Company Profile" }];
 }
 
-export default function RentalProfile() {
+export async function loader({ request }: Route.ClientLoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const token = session.get("token");
+
+  if (!session.has("token")) {
+    return redirect("/signin");
+  }
+
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_API_URL}/auth/me`,
+    { headers: { Authorization: `Bearer ${token}` } },
+  );
+  
+  if (!response.ok) {
+     return redirect("/signin");
+  }
+
+  const user: UserAuthMe = await response.json();
+  
+  if (user.role !== "PROVIDER") {
+      return redirect("/dashboard");
+  }
+  
+  return { user };
+}
+
+export default function RentalProfile({ loaderData }: Route.ComponentProps) {
+  const { user } = loaderData;
+
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-4">Rental Company Profile</h1>
-      <p>Profile management coming soon...</p>
+    <div className="min-h-screen bg-slate-50">
+      {/* Header */}
+      <div className="bg-white border-b">
+        <div className="flex items-center justify-between p-4 max-w-2xl mx-auto">
+          <h1 className="text-2xl font-bold">Company Profile</h1>
+          <button className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+            <Bell className="h-6 w-6" />
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-2xl mx-auto p-4 space-y-4">
+        {/* User Card */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-8">
+            <div className="flex flex-col items-center text-center space-y-4">
+              {/* Avatar */}
+              <div className="w-24 h-24 rounded-full bg-slate-800 flex items-center justify-center">
+                <span className="text-white text-4xl font-semibold">
+                  {user.fullName.charAt(0).toUpperCase()}
+                </span>
+              </div>
+
+              {/* Name */}
+              <div>
+                <h2 className="text-2xl font-bold">{user.fullName}</h2>
+                <p className="text-slate-600">Rental Provider</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Menu Items */}
+        <Card>
+          <CardContent className="p-0">
+            {/* View Profile */}
+            <button className="w-full flex items-center justify-between p-6 hover:bg-slate-50 transition-colors border-b">
+              <div className="flex items-center gap-4">
+                <Building2 className="h-6 w-6" />
+                <span className="font-medium">Company Details</span>
+              </div>
+              <ChevronRight className="h-5 w-5 text-slate-400" />
+            </button>
+            
+            {/* Account Settings */}
+             <button className="w-full flex items-center justify-between p-6 hover:bg-slate-50 transition-colors border-b">
+              <div className="flex items-center gap-4">
+                <User className="h-6 w-6" />
+                <span className="font-medium">Account Settings</span>
+              </div>
+              <ChevronRight className="h-5 w-5 text-slate-400" />
+            </button>
+
+            {/* Log Out */}
+            <Form method="post" action="/signout" className="w-full">
+              <button
+                type="submit"
+                className="w-full flex items-center gap-4 p-6 hover:bg-slate-50 transition-colors text-left"
+              >
+                <LogOut className="h-6 w-6" />
+                <span className="font-medium">Log out</span>
+              </button>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
