@@ -139,7 +139,12 @@ export default function LayoutRental({ loaderData }: Route.ComponentProps) {
             />
             <span className="font-bold">Provider Panel</span>
           </div>
-          {/* Simple mobile menu could go here, for now just profile/logout */}
+          <form action="/signout" method="post">
+            <Button variant="ghost" size="icon" className="text-red-600">
+              <LogOut className="h-5 w-5" />
+              <span className="sr-only">Sign out</span>
+            </Button>
+          </form>
         </header>
 
         {/* Main Content */}
