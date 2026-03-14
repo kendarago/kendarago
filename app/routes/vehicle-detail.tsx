@@ -27,6 +27,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
   const vehicle = loaderData;
+  console.log(vehicle);
   const { rentalCompanySlug, vehicleSlug } = useParams();
   const [termsExpanded, setTermsExpanded] = useState(false);
   const [addonsExpanded, setAddonsExpanded] = useState(false);
@@ -89,14 +90,14 @@ export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
         <Card className="p-4">
           <div className="flex items-center justify-between">
             <div className="space-y-2">
-              <h3 className="font-semibold">Langit Senja</h3>
+              <h3 className="font-semibold">{vehicle.rentalCompany.name}</h3>
               <div className="flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>Gg. VI Langgar No.16, Gubeng, Surabaya</span>
+                <span>{vehicle.rentalCompany.address}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
-                <span>07:00 AM - 10:00 PM</span>
+                <span>{vehicle.rentalCompany.operatingHours}</span>
               </div>
             </div>
             <Button variant="ghost" size="icon">
@@ -300,7 +301,11 @@ export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
             <p className="text-xl font-bold">IDR 150,000/day</p>
           </div>
           <Button size="lg" className="px-8" asChild>
-            <Link to={`/vehicle-detail/${rentalCompanySlug}/${vehicleSlug}/book`}>Let's Book!</Link>
+            <Link
+              to={`/vehicle-detail/${rentalCompanySlug}/${vehicleSlug}/book`}
+            >
+              Let's Book!
+            </Link>
           </Button>
         </div>
       </div>
