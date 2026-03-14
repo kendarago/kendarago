@@ -27,7 +27,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
   const vehicle = loaderData;
-  console.log(vehicle);
   const { rentalCompanySlug, vehicleSlug } = useParams();
   const [termsExpanded, setTermsExpanded] = useState(false);
   const [addonsExpanded, setAddonsExpanded] = useState(false);
@@ -110,22 +109,42 @@ export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
         <Card className="py-2 px-4">
           <h3 className="font-semibold mb-3">Facilities</h3>
           <div className="flex flex-wrap gap-3 text-sm">
-            <div className="flex items-center gap-2">
-              <span>⛑️</span>
-              <span>2 Helmets</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span>🧥</span>
-              <span>2 Raincoats</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span>📱</span>
-              <span>1 Holder</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span>🛞</span>
-              <span>1 Disc Brake</span>
-            </div>
+            {vehicle.vehicleTypeSlug == "motorcycle" && (
+              <>
+                <div className="flex items-center gap-2">
+                  <span>⛑️</span>
+                  <span>2 Helmets</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>🧥</span>
+                  <span>2 Raincoats</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>🛞</span>
+                  <span>1 Disc Brake</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>📱</span>
+                  <span>1 Holder</span>
+                </div>
+              </>
+            )}
+            {vehicle.vehicleTypeSlug === "car" && (
+              <>
+                <div className="flex items-center gap-2">
+                  <span>🛡️</span>
+                  <span>Insurance Included</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>🔌</span>
+                  <span>USB Charger</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>🧒</span>
+                  <span>Baby Seat (Optional)</span>
+                </div>
+              </>
+            )}
           </div>
         </Card>
 
