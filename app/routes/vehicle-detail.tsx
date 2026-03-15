@@ -106,9 +106,9 @@ export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
         </Card>
 
         {/* Facilities */}
-        <Card className="py-2 px-4">
-          <h3 className="font-semibold mb-3">Facilities</h3>
-          <div className="flex flex-wrap gap-3 text-sm">
+        <Card className="py-2 px-4 space-y-0 gap-1">
+          <h3 className="font-semibold">Facilities</h3>
+          <div className="grid grid-cols-2 text-sm">
             {vehicle.vehicleTypeSlug == "motorcycle" && (
               <>
                 <div className="flex items-center gap-2">
@@ -120,12 +120,12 @@ export default function VehicleDetail({ loaderData }: Route.ComponentProps) {
                   <span>2 Raincoats</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span>🛞</span>
-                  <span>1 Disc Brake</span>
-                </div>
-                <div className="flex items-center gap-2">
                   <span>📱</span>
                   <span>1 Holder</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>🛞</span>
+                  <span>1 Disc Brake</span>
                 </div>
               </>
             )}
