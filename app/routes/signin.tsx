@@ -175,7 +175,7 @@ export default function SignInRoute({ actionData }: Route.ComponentProps) {
         <div className="text-center text-sm text-gray-600 mt-4">
           Don’t have an account?{" "}
           <a
-            href="/register"
+            href="/signup"
             className="text-black-600 hover:underline font-medium"
           >
             Register here
